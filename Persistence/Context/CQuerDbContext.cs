@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Persistence.DataModels;
+﻿using Common.DataModels.IdentityManagement;
+using Common.DataModels.StandardEntities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -14,11 +15,12 @@ namespace Persistence.Context
 
         //TODO: Add models & DbSets
         DbSet<Account> Accounts { get; set; }
+        DbSet<FileReference> FileReferences { get; set; }
+        DbSet<Ticket> Tickets { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
         }
-
     }
 }
