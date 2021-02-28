@@ -14,9 +14,9 @@ namespace Persistence.Context
         public CQuerDbContext(DbContextOptions<CQuerDbContext> options) : base(options) { }
 
         //TODO: Add models & DbSets
-        DbSet<Account> Accounts { get; set; }
-        DbSet<FileReference> FileReferences { get; set; }
-        DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Account> Accounts { get; set; }
+        public DbSet<FileReference> FileReferences { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
