@@ -1,15 +1,20 @@
-﻿using Persistence.Context;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Persistence.Context;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace CommonServices.DatabaseOperator
 {
-    class DatabaseConnector : DbOperationExecutor
+    class DatabaseConnector : DbOperationExecutor, IDatabaseConnector
     {
-        public DatabaseConnector(CQuerDbContext dbContext) : base(dbContext)
+        public DatabaseConnector(ICQuerDbContext dbContext) : base(dbContext)
         {
-            dbContext.Database.EnsureCreated();
+        }
+
+        public void DownloadFile(string fileSource)
+        {
+            throw new NotImplementedException();
         }
 
         //TODO: Possibly change to Tasks in the future
@@ -17,7 +22,5 @@ namespace CommonServices.DatabaseOperator
         {
             return GetFilePath(fileName);
         }
-
-
     }
 }

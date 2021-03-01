@@ -16,6 +16,8 @@ namespace Persistence
             {
                 options.UseSqlServer(configuration.GetConnectionString("CQuerDB"));
             });
+            services.AddScoped<ICQuerDbContext>(provider => provider.GetService<CQuerDbContext>());
+
             return services;
         }
     }

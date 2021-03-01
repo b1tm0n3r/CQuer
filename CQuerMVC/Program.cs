@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Persistence.Context;
+using CommonServices;
 
 namespace CQuer
 {
@@ -32,6 +33,8 @@ namespace CQuer
             using var scope = host.Services.CreateScope();
             var services = scope.ServiceProvider;
             var context = services.GetRequiredService<CQuerDbContext>();
+            //Testing purposes (exception thrown if directory in DefaultFileStorePath doesn't exist)
+            services.GetRequiredService<IFileManagerService>();
             try
             {
                 await context.Database.EnsureCreatedAsync();

@@ -4,23 +4,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CommonServices.DatabaseOperator
 {
     abstract class DbOperationExecutor
     {
-        private CQuerDbContext dbContext;
-        protected DbOperationExecutor(CQuerDbContext dbContext)
+        private readonly ICQuerDbContext dbContext;
+        protected DbOperationExecutor(ICQuerDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
-
         //Add actions
-        protected void AddFileReference(FileReference fileReference)
+        protected async Task AddFileReference(FileReference fileReference)
         {
             dbContext.FileReferences.Add(fileReference);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
         //Get actions
         protected string GetFilePath(string fileName)
@@ -31,7 +31,5 @@ namespace CommonServices.DatabaseOperator
         {
             return dbContext.FileReferences.FirstOrDefault(x => x.FileName == fileName).SHA256Hash;
         }
-
-
     }
 }

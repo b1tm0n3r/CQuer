@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Persistence;
+using CommonServices;
 
 namespace CQuer
 {
@@ -26,6 +27,9 @@ namespace CQuer
         {
             services.AddControllersWithViews();
             services.AddPersistence(Configuration);
+            services.AddDatabaseConnector();
+            services.AddFileManager();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
