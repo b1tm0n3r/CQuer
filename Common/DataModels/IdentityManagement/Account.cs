@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Persistence.DataModels
+namespace Common.DataModels.IdentityManagement
 {
     public enum AccountType
     {
