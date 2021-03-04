@@ -1,69 +1,60 @@
-﻿using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Common.DataModels.IdentityManagement;
+using Common.DTOs;
+using CommonServices.AccountServices;
 using CQuerMVC.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Persistence.Context;
 
 namespace CQuerMVC.Controllers
 {
     public class AccountController : BaseController
     {
-        private readonly CQuerDbContext _dbContext;
-
-        public AccountController(CQuerDbContext dbContext)
+        private readonly IAccountService _accountService;
+        public AccountController(IAccountService accountService)
         {
-            _dbContext = dbContext;
+            _accountService = accountService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<AccountDto>>> GetAllAccounts()
+        {
+            var accounts = await _accountService.GetAccounts();
+            return accounts.ToList();
         }
         
         [HttpPost("register")]
-        public async Task<ActionResult<Account>> RegisterAccount(RegisterDto registerDto)
+        public async Task<ActionResult> RegisterAccount(RegisterDto registerDto)
         {
-            if (await AccountExists(registerDto.Username))
+            if (await _accountService.AccountExists(registerDto.Username))
             {
                 return BadRequest("Username is taken");
             }
-            using var hmac = new HMACSHA512();
 
-            var account = new Account
+            if (!ModelState.IsValid)
             {
-                Name = registerDto.Username,
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                PasswordSalt = hmac.Key,
-                AccountType = registerDto.AccountType
-            };
+                return BadRequest(ModelState);
+            }
+            
+            var id = await _accountService.Register(registerDto);
 
-            _dbContext.Accounts.Add(account);
-            await _dbContext.SaveChangesAsync();
-
-            return account;
+            return Created($"/api/account/{id}",null);
         }
         
         [HttpPost("login")]
-        public async Task<ActionResult<Account>> LoginAccount(LoginDto loginDto)
+        public async Task<ActionResult> LoginAccount(LoginDto loginDto)
         {
-            var account = await _dbContext.Accounts
-                .SingleOrDefaultAsync(x => x.Name == loginDto.Username);
+            var account = await _accountService.GetAccountFromLogin(loginDto);
 
             if (account == null)
                 return Unauthorized("Invalid username");
-
-            using var hmac = new HMACSHA512(account.PasswordSalt);
             
-            var loginHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
-
-            for (int i=0; i < loginHash.Length; i++)
-            {
-                if (loginHash[i] != account.PasswordHash[i]) return Unauthorized("Invalid password");
-            }
-            return account;
+            var login = _accountService.Login(loginDto);
+            
+            if (await login)
+                return Ok();
+            return Unauthorized("Invalid password");
         }
-        private async Task<bool> AccountExists(string username)
-        {
-            return await _dbContext.Accounts.AnyAsync(x => x.Name == username);
-        }
+        
     }
 }
