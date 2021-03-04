@@ -1,13 +1,9 @@
+using Common.MappingProfiles;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Persistence;
 using CommonServices;
 
@@ -29,7 +25,8 @@ namespace CQuer
             services.AddPersistence(Configuration);
             services.AddDatabaseConnector();
             services.AddFileManager();
-            
+            services.AddAccountService();
+            services.AddAutoMapper(x=>x.AddProfile<AccountMapperProfile>(), typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

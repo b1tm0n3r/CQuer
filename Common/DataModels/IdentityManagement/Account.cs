@@ -19,7 +19,7 @@ namespace Common.DataModels.IdentityManagement
         public string Name { get; set; }
         [Required]
         public AccountType AccountType { get; set; }
-        [Required]
-        public string Password { get; set; } //TODO: store hash of pass
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
     }
 }
