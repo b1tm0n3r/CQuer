@@ -30,7 +30,7 @@ namespace CommonServicesTests
             Assert.AreEqual(EXPECTED_TEST_FILE_SHA256_CHECKSUM, result);
         }
 
-        private IConfiguration CreateMockConfiguration()
+        private static IConfiguration CreateMockConfiguration()
         {
             string tempDirectory = Path.GetTempPath();
             var testConfiguration = new Dictionary<string, string>
