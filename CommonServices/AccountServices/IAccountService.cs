@@ -14,5 +14,7 @@ namespace CommonServices.AccountServices
         Task<bool> Login(LoginDto loginDto);
         Task<Account> GetAccountFromLogin(LoginDto loginDto);
         Task<IEnumerable<AccountDto>> GetAccounts();
+        Task<AccountDto> GetAccount(int id);
+        Task<bool> UpdateAccount(int id, UpdateAccountDto accountDto);
     }
 }

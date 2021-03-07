@@ -17,7 +17,6 @@ namespace CommonServices.AccountServices
     {
         private readonly ICQuerDbContext _dbContext;
         private readonly IMapper _mapper;
-
         public AccountService(ICQuerDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
@@ -47,9 +46,7 @@ namespace CommonServices.AccountServices
         public async Task<bool> Login(LoginDto loginDto)
         {
             var account = await GetAccountFromLogin(loginDto);
-
             using var hmac = new HMACSHA512(account.PasswordSalt);
-                
             var loginHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
 
             return !loginHash.Where((t, i) => t != account.PasswordHash[i]).Any();
@@ -60,13 +57,31 @@ namespace CommonServices.AccountServices
                 .SingleOrDefaultAsync(x => x.Name == loginDto.Username);
             return account;
         }
-
         public async Task<IEnumerable<AccountDto>> GetAccounts()
         {
             var accounts = await _dbContext.Accounts.ToListAsync();
-            var accountsDto = _mapper.Map<List<AccountDto>>(accounts);
+            var accountsDto = _mapper.Map<IEnumerable<AccountDto>>(accounts);
 
             return accountsDto;
+        }
+        public async Task<AccountDto> GetAccount(int id)
+        {
+            var account = await _dbContext.Accounts.FindAsync(id);
+            var accountDto = _mapper.Map<AccountDto>(account);
+            
+            return accountDto;
+        }
+
+        public async Task<bool> UpdateAccount(int id, UpdateAccountDto accountDto)
+        {
+            var account = _dbContext.Accounts.FirstOrDefault(x => x.AccountId == id);
+            
+            if (account == null)
+                return false;
+
+            account.Name = accountDto.Name;
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
         
     }

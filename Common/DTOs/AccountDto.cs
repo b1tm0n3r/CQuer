@@ -6,6 +6,6 @@ namespace Common.DTOs
     {
         public int AccountId { get; set; }
         public string Name { get; set; }
-        //public AccountType AccountType { get; set; }
+        public AccountType AccountType { get; set; }
     }
 }
