@@ -19,7 +19,7 @@ namespace CommonServicesTests
         [TestMethod]
         public void Can_Get_Correct_SHA256_Checksum()
         {
-            var mockConfiguration = CreateMockConfiguration();
+            var mockConfiguration = CommonMethods.CreateMockConfiguration();
             var mockDatabaseConnector = new Mock<IDatabaseConnector>();
             FileManagerService objectUnderTest = new FileManagerService(mockConfiguration, mockDatabaseConnector.Object);
 
@@ -28,16 +28,6 @@ namespace CommonServicesTests
             var result = objectUnderTest.ComputeFileSHA256Checksum(workingDirectory + Path.DirectorySeparatorChar + RESOURCES_DIRECTORY + Path.DirectorySeparatorChar + TEST_FILE);
 
             Assert.AreEqual(EXPECTED_TEST_FILE_SHA256_CHECKSUM, result);
-        }
-
-        private static IConfiguration CreateMockConfiguration()
-        {
-            string tempDirectory = Path.GetTempPath();
-            var testConfiguration = new Dictionary<string, string>
-            {
-                { "DefaultFileStorePath", tempDirectory }
-            };
-            return new ConfigurationBuilder().AddInMemoryCollection(testConfiguration).Build();
         }
     }
 }
