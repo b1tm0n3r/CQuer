@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Common.DataModels.IdentityManagement;
 using Common.DTOs;
 using CommonServices.AccountServices;
 using CQuerMVC.DTOs;
@@ -21,6 +22,15 @@ namespace CQuerMVC.Controllers
         {
             var accounts = await _accountService.GetAccounts();
             return accounts.ToList();
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AccountDto>> GetAccount(int id)
+        {
+            var account = await _accountService.GetAccount(id);
+            if (account == null)
+                return NotFound("Account with given id does not exist");
+            return Ok(account);
         }
         
         [HttpPost("register")]
@@ -54,6 +64,18 @@ namespace CQuerMVC.Controllers
             if (await login)
                 return Ok();
             return Unauthorized("Invalid password");
+        }
+        
+        [HttpPut("{id}")]
+        public async Task<ActionResult<AccountDto>> UpdateAccount([FromRoute]int id, [FromBody]UpdateAccountDto accountDto)
+        {
+            if (!ModelState.IsValid)
+                BadRequest(ModelState);
+            
+            var account = await _accountService.UpdateAccount(id, accountDto);
+            if (!account)
+                return NotFound();
+            return Ok();
         }
         
     }
