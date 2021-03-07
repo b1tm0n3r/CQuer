@@ -1,47 +1,65 @@
-﻿using CQuerMVC;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
+using Common.DataModels.IdentityManagement;
+using CommonServices.AccountServices;
+using CQuerMVC;
 using CQuerMVC.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MockQueryable.Moq;
+using Moq;
 
 namespace CommonServicesTests
 {
     [TestClass]
     public class AccountServiceTest
     {
-        private AccountController _controller;
-        private AccountServiceFake _service;
+        public static List<Account> ACCOUNTS;
 
-        public AccountServiceTest()
+        [TestInitialize()]
+        public void StartUp()
         {
-            _service = new AccountServiceFake();
-            _controller = new AccountController(_service);
+            ACCOUNTS = new List<Account>();
+            ACCOUNTS.Add(new Account {Name = "test"});
         }
-
         [TestMethod]
         public void Register_CheckingBadRequest()
         {
-            var controller = new AccountController(_service);
-            var user = new RegisterDto
+            var mapperMock = new Mock<IMapper>();
+            var accountMock = ACCOUNTS.AsQueryable().BuildMockDbSet();
+            DbContextStub dbContextStub = new DbContextStub(accountMock.Object);
+            AccountService objectUnderTest = new AccountService(dbContextStub, mapperMock.Object);
+            var controller = new AccountController(objectUnderTest);
+            
+            var testData = new RegisterDto
             {
-                Username = "user",
-                Password = "password"
+                Username = "test",
             };
-            var createdResult = controller.RegisterAccount(user).Result;
-            Assert.IsInstanceOfType(createdResult, typeof(BadRequestObjectResult));
+            
+            var result = controller.RegisterAccount(testData).Result;
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+            Assert.IsNotNull(result);
         }
         
         [TestMethod]
         public void Register_CheckingCreateRequest()
         {
-            var controller = new AccountController(_service);
-            var user = new RegisterDto
+            var mapperMock = new Mock<IMapper>();
+            var accountMock = ACCOUNTS.AsQueryable().BuildMockDbSet();
+            DbContextStub dbContextStub = new DbContextStub(accountMock.Object);
+            AccountService objectUnderTest = new AccountService(dbContextStub, mapperMock.Object);
+            var controller = new AccountController(objectUnderTest);
+            
+            var testData = new RegisterDto
             {
                 Username = "user2", //type unique username here
                 Password = "password",
             };
-            var createdResult = controller.RegisterAccount(user).Result;
-            Assert.IsInstanceOfType(createdResult, typeof(CreatedResult));
+            
+            var result = controller.RegisterAccount(testData).Result;
+            Assert.IsInstanceOfType(result, typeof(CreatedResult));
+            Assert.IsNotNull(result);
         }
-        
     }
 }
