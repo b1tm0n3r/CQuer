@@ -2,8 +2,6 @@
 using System.Threading.Tasks;
 using Common.DataModels.IdentityManagement;
 using Common.DTOs;
-using CQuerMVC;
-using CQuerMVC.DTOs;
 
 namespace CommonServices.AccountServices
 {

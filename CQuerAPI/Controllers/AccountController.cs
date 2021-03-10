@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Common.DataModels.IdentityManagement;
 using Common.DTOs;
 using CommonServices.AccountServices;
-using CQuerMVC.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CQuerMVC.Controllers
+namespace CQuerAPI.Controllers
 {
     public class AccountController : BaseController
     {

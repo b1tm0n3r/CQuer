@@ -1,12 +1,9 @@
-﻿using CommonServices;
+﻿using System;
+using System.IO;
+using CommonServices;
 using CommonServices.DatabaseOperator;
-using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace CommonServicesTests
 {

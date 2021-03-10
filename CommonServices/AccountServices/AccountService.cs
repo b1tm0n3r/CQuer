@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Common.DataModels.IdentityManagement;
 using Common.DTOs;
-using CQuerMVC;
-using CQuerMVC.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 
