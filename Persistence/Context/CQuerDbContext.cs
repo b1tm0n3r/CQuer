@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Context
 {
-    public class CQuerDbContext : DbContext, ICQuerDbContext
+    class CQuerDbContext : DbContext, ICQuerDbContext
     {
         public CQuerDbContext(DbContextOptions<CQuerDbContext> options) : base(options) { }
 
