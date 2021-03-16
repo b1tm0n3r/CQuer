@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CommonServices\CommonServices.csproj" />
+    <ProjectReference Include="..\CQuerAPI\CQuerAPI.csproj" />
     <ProjectReference Include="..\CQuerMVC\CQuerMVC.csproj" />
   </ItemGroup>
 

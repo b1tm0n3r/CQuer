@@ -1,4 +1,4 @@
-﻿namespace CQuerMVC.DTOs
+﻿namespace Common.DTOs
 {
     public class LoginDto
     {

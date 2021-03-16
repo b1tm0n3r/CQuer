@@ -1,6 +1,6 @@
 using System;
 
-namespace CQuer.Models
+namespace CQuerMVC.Models
 {
     public class ErrorViewModel
     {

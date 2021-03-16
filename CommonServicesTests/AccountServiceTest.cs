@@ -2,9 +2,9 @@
 using System.Linq;
 using AutoMapper;
 using Common.DataModels.IdentityManagement;
+using Common.DTOs;
 using CommonServices.AccountServices;
-using CQuerMVC;
-using CQuerMVC.Controllers;
+using CQuerAPI.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MockQueryable.Moq;

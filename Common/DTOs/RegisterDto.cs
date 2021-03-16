@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Common.DataModels.IdentityManagement;
 
-namespace CQuerMVC
+namespace Common.DTOs
 {
     public class RegisterDto
     {

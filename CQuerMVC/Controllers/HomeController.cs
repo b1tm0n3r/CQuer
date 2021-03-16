@@ -1,13 +1,15 @@
-﻿using CQuer.Models;
+﻿using System;
+using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using Common.DTOs;
+using CQuerMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
-namespace CQuer.Controllers
+namespace CQuerMVC.Controllers
 {
     public class HomeController : Controller
     {
@@ -22,8 +24,33 @@ namespace CQuer.Controllers
         {
             return View();
         }
-
         public IActionResult Privacy()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public IActionResult Login(LoginDto loginDto)
+        {
+            //TODO: Create correct API client
+            HttpClient client = new HttpClient();
+                
+            var uri = new Uri("https://localhost:6001/api/account/login");
+            var json = JsonConvert.SerializeObject(loginDto);
+                
+            HttpContent stringContent = new StringContent(json, Encoding.UTF8, "application/json"); 
+                
+            var postResult = client.PostAsync(uri, stringContent).Result;
+
+            if (postResult.StatusCode == HttpStatusCode.OK)
+            {
+                return RedirectToAction("UserPanel");
+            }
+
+            return View("Index");
+        }
+
+        public IActionResult UserPanel()
         {
             return View();
         }
@@ -31,7 +58,7 @@ namespace CQuer.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
     }
 }
