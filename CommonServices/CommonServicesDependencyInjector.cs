@@ -9,6 +9,7 @@ using AutoMapper;
 using CommonServices.AccountServices;
 using CommonServices.ClientService;
 using RestSharp;
+using CommonServices.FileServices.FileManager;
 
 namespace CommonServices
 {

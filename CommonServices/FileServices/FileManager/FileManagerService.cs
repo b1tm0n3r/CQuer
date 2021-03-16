@@ -8,7 +8,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace CommonServices
+namespace CommonServices.FileServices.FileManager
 {
     public class FileManagerService : IFileManagerService
     {
