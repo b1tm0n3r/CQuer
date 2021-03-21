@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Text;
 using AutoMapper;
 using CommonServices.AccountServices;
+using CommonServices.ClientService;
+using RestSharp;
 
 namespace CommonServices
 {
@@ -27,10 +29,10 @@ namespace CommonServices
             services.AddScoped<IAccountService, AccountService>();
             return services;
         }
-        
-        public static IServiceCollection AddMapper(this IServiceCollection services)
+        public static IServiceCollection AddClientService(this IServiceCollection services)
         {
-            services.AddScoped<IMapper>();
+            services.AddScoped<IAccountClientService, AccountClientService>();
+            services.AddTransient<IRestClient, RestClient>();
             return services;
         }
     }
