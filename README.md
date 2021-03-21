@@ -7,10 +7,17 @@ The operation consists of downloading the file to the server, where its checksum
 
 ## Getting started
 Connection string should be located in the appsettings.json file as value of CQuerDB key in ConnectionStrings list.
+
+Path to file store should be located in the appsettings.json file as value of DefaultFileStorePath.
+
 SQL server is supported.
 
 ## Status
 Project status: in progress.
+
+## Technologies
+
+ASP.NET Core, MVC 5, Entity Framework  
 
 ## Documentation
 Will appear here in the future.
