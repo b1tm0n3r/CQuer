@@ -1,0 +1,24 @@
+﻿@model Common.DTOs.RegisterDto
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div id="login-row" class="row justify-content-center align-items-center">
+    <div id="login-column" class="col-md-6">
+        <div id="login-box" class="col-md-12">
+            <form asp-controller="Account" asp-action="Register" method="post" class="form">
+                <h1 class="text-center">Register</h1>
+                <p class="text-secondary"> Create new account</p>
+                <div class="form-group">
+                    <input type="text" class="form-control" asp-for="Username" placeholder="Username" required="required">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" asp-for="Password" placeholder="Password" required="required">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" asp-for="Password" placeholder="Repeat Password" required="required">
+                </div>
+                <input type="submit" name="" value="Register" href="#">
+            </form>
+        </div>
+    </div>
+</div>
