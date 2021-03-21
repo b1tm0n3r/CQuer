@@ -15,11 +15,12 @@ namespace Common
             return true;
         }
 
-        public static bool IsConnectionStringValid(string databaseConnectionString)
+        public static bool IsConnectionStringValid(string connectionString)
         {
+            CanEstablishConnectionWithDatabase(connectionString);
             return true;
         }
-        private static bool CanEstablishConnectionWithDatabase()
+        private static bool CanEstablishConnectionWithDatabase(string connectionString)
         {
             return true;
         }
