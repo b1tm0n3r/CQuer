@@ -10,6 +10,7 @@ using CommonServices.AccountServices;
 using CommonServices.FileManager;
 using CommonServices.HttpWebProxy;
 using RestSharp;
+using CommonServices.ClientService;
 
 namespace CommonServices
 {
@@ -20,7 +21,6 @@ namespace CommonServices
             AddDatabaseConnector(services);
             AddFileManager(services);
             AddAccountService(services);
-            AddClientService(services);
             AddHttpWebClientProxy(services);
             return services;
         }

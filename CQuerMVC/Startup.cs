@@ -21,7 +21,6 @@ namespace CQuerMVC
         {
             services.AddControllersWithViews()
                     .AddRazorRuntimeCompilation();
-
             services.AddClientService();
         }
 
