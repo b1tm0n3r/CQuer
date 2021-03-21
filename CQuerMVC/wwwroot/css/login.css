@@ -1,5 +1,6 @@
 ﻿
 .form {
+    margin-top: 10%;
     padding: 40px;
     background: #191919;
     text-align: center;
@@ -30,7 +31,6 @@
 
     .form input[type="text"]:focus,
     .form input[type="password"]:focus {
-        width: 300px;
         border-color: #2ecc71
     }
 
