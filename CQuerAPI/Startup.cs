@@ -25,9 +25,7 @@ namespace CQuerAPI
             services.AddControllers();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "CQuerAPI", Version = "v1"}); });
             services.AddPersistence(Configuration);
-            services.AddDatabaseConnector();
-            services.AddFileManager();
-            services.AddAccountService();
+            services.AddCommonServices();
             services.AddAutoMapper(x=>x.AddProfile<AccountMapperProfile>(), typeof(Startup));
         }
 

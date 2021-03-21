@@ -1,6 +1,7 @@
 ﻿using CommonServices;
 using CommonServices.DatabaseOperator;
-using CommonServices.FileServices.FileManager;
+using CommonServices.FileManager;
+using CommonServices.HttpWebProxy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -23,7 +24,8 @@ namespace CommonServicesTests
         {
             var mockConfiguration = CommonMethods.CreateMockConfiguration();
             var mockDatabaseConnector = new Mock<IDatabaseConnector>();
-            FileManagerService objectUnderTest = new FileManagerService(mockConfiguration, mockDatabaseConnector.Object);
+            var mockHttpWebClientProxy = new Mock<IHttpWebClientProxy>();
+            FileManagerService objectUnderTest = new FileManagerService(mockConfiguration, mockDatabaseConnector.Object, mockHttpWebClientProxy.Object);
 
             string workingDirectory = Path.GetFullPath(Directory.GetCurrentDirectory());
             string testFilePath = workingDirectory + Path.DirectorySeparatorChar + RESOURCES_DIRECTORY + Path.DirectorySeparatorChar + TEST_FILE;
@@ -38,7 +40,8 @@ namespace CommonServicesTests
         {
             var mockConfiguration = CommonMethods.CreateMockConfiguration();
             var mockDatabaseConnector = new Mock<IDatabaseConnector>();
-            FileManagerService objectUnderTest = new FileManagerService(mockConfiguration, mockDatabaseConnector.Object);
+            var mockHttpWebClientProxy = new Mock<IHttpWebClientProxy>();
+            FileManagerService objectUnderTest = new FileManagerService(mockConfiguration, mockDatabaseConnector.Object, mockHttpWebClientProxy.Object);
 
             string workingDirectory = Path.GetFullPath(Directory.GetCurrentDirectory());
             string testFilePath = workingDirectory + Path.DirectorySeparatorChar + RESOURCES_DIRECTORY + Path.DirectorySeparatorChar + TEST_FILE;
