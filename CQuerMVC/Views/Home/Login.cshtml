@@ -1,0 +1,23 @@
+﻿@model Common.DTOs.LoginDto
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card-body">
+                <form asp-controller="Home" asp-action="Login" method="post" class="box">
+                    <h1 class="text-center">Login</h1>
+                    <p class="text-secondary"> Enter your login and password!</p>
+                    <div class="form-group">
+                        <input type="text" class="form-control" asp-for="Username" placeholder="Username" required="required">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" asp-for="Password" placeholder="Password" required="required">
+                    </div>
+                    <input type="submit" name="" value="Login" href="#">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
