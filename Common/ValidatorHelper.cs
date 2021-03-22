@@ -21,6 +21,11 @@ namespace Common
         {
             try
             {
+                /*
+                 * Default timeout value is 15 seconds and cannot be changed.
+                 * Exception will be thrown in first 15 seconds from app startup 
+                 * Note: applicable when invalid connection string is located in appsettings.json 
+                 */
                 using SqlConnection connection = new SqlConnection(connectionString);
                 connection.Open();
                 connection.Dispose();

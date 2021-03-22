@@ -1,10 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Common;
 using Microsoft.Extensions.Configuration;
-using System.IO;
-using System;
-using System.Collections.Generic;
-using System.Security.AccessControl;
 using Moq;
 
 namespace CommonTests
@@ -25,35 +21,35 @@ namespace CommonTests
             var validatorHelperMock = new Mock<IValidatorHelper>();
             validatorHelperMock.Setup(x => x.CanEstablishConnectionWithDatabase(connectionString)).Returns(true);
 
-            var objectUnderTest = new AppSettingsValidator(validatorHelperMock.Object);
-            var result = objectUnderTest.IsConnectionStringValid(connectionString);
+            var objectUnderTest = new AppSettingsValidator(configuration, validatorHelperMock.Object);
+            var result = objectUnderTest.IsConnectionStringValid();
 
             Assert.IsNotNull(result);
             Assert.IsTrue(result);
         }
         [TestMethod]
-        public void THROWS_EXCEPTION_IF_CANNOT_CONNECT_TO_DATABASE()
+        public void RETURN_FALSE_IF_CANNOT_CONNECT_TO_DATABASE()
         {
             IConfiguration configuration = CommonMethods.CreateMockConfigurationFromFile(APPSETTINGS_WITH_INVALID_DATA);
-            var connectionString = configuration.GetConnectionString("CQuerDB");
 
             var validatorHelperMock = new Mock<IValidatorHelper>();
-            var objectUnderTest = new AppSettingsValidator(validatorHelperMock.Object);
+            var objectUnderTest = new AppSettingsValidator(configuration, validatorHelperMock.Object);
+            var result = objectUnderTest.IsConnectionStringValid();
 
-            Assert.ThrowsException<Exception>(() => { objectUnderTest.IsConnectionStringValid(connectionString); }, 
-                "Cannot establish connection with database using connection string from appsettings.json");
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result);
         }
         [TestMethod]
-        public void THROWS_EXCEPTION_WITH_EMPTY_CONNECTION_STRING()
+        public void RETURN_FALSE_WITH_EMPTY_CONNECTION_STRING()
         {
             IConfiguration configuration = CommonMethods.CreateMockConfigurationFromFile(APPSETTINGS_WITH_EMPTY_ENTITIES);
-            var connectionString = configuration.GetConnectionString("CQuerDB");
 
             var validatorHelperMock = new Mock<IValidatorHelper>();
-            var objectUnderTest = new AppSettingsValidator(validatorHelperMock.Object);
+            var objectUnderTest = new AppSettingsValidator(configuration, validatorHelperMock.Object);
+            var result = objectUnderTest.IsConnectionStringValid();
 
-            Assert.ThrowsException<Exception>(() => { objectUnderTest.IsConnectionStringValid(connectionString); },
-                "Empty Connection String in appsettings.json");
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result);
         }
 
         [TestMethod]
@@ -64,36 +60,37 @@ namespace CommonTests
 
             var validatorHelperMock = new Mock<IValidatorHelper>();
             validatorHelperMock.Setup(x => x.HaveRequiredPermissionsToFileStore(fileStorePath)).Returns(true);
-            var objectUnderTest = new AppSettingsValidator(validatorHelperMock.Object);
-            var result = objectUnderTest.IsFileStorePathValid(fileStorePath);
+            var objectUnderTest = new AppSettingsValidator(configuration, validatorHelperMock.Object);
+            var result = objectUnderTest.IsFileStorePathValid();
 
             Assert.IsNotNull(result);
             Assert.IsTrue(result);
         }
         [TestMethod]
-        public void THROWS_EXCEPTION_WITHOUT_READ_WRITE_ACCESS_TO_FILESTORE()
+        public void RETURN_FALSE_WITHOUT_READ_WRITE_ACCESS_TO_FILESTORE()
         {
             IConfiguration configuration = CommonMethods.CreateConfigurationWithFileStorePath(TEST_DIRECTORY_PATH);
             var fileStorePath = configuration.GetValue<string>("DefaultFileStorePath");
 
             var validatorHelperMock = new Mock<IValidatorHelper>();
             validatorHelperMock.Setup(x => x.HaveRequiredPermissionsToFileStore(fileStorePath)).Returns(false);
-            var objectUnderTest = new AppSettingsValidator(validatorHelperMock.Object);
+            var objectUnderTest = new AppSettingsValidator(configuration, validatorHelperMock.Object);
+            var result = objectUnderTest.IsFileStorePathValid();
 
-            Assert.ThrowsException<Exception>(() => { objectUnderTest.IsFileStorePathValid(fileStorePath); },
-                "Missing Read/Write privileges to directory set as FileStore in appsettings.json");
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result);
         }
         [TestMethod]
-        public void THROWS_EXCEPTION_IF_FILESTORE_PATH_POINTS_NON_EXISTING_DIRECTORY()
+        public void RETURN_FALSE_IF_FILESTORE_PATH_POINTS_NON_EXISTING_DIRECTORY()
         {
             IConfiguration configuration = CommonMethods.CreateConfigurationWithFileStorePath("/non/existing/directory");
-            var fileStorePath = configuration.GetValue<string>("DefaultFileStorePath");
 
             var validatorHelperMock = new Mock<IValidatorHelper>();
-            var objectUnderTest = new AppSettingsValidator(validatorHelperMock.Object);
+            var objectUnderTest = new AppSettingsValidator(configuration, validatorHelperMock.Object);
+            var result = objectUnderTest.IsFileStorePathValid();
 
-            Assert.ThrowsException<Exception>(() => { objectUnderTest.IsFileStorePathValid(fileStorePath); },
-                "FileStore path from appsettings.json points to non-existing directory!");
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result);
         }
 
         [TestMethod]
@@ -104,35 +101,35 @@ namespace CommonTests
 
             var validatorHelperMock = new Mock<IValidatorHelper>();
             validatorHelperMock.Setup(x => x.IsLocalAddress(localApiUrl)).Returns(true);
-            var objectUnderTest = new AppSettingsValidator(validatorHelperMock.Object);
-            var result = objectUnderTest.IsLocalApiUrlValid(localApiUrl);
+            var objectUnderTest = new AppSettingsValidator(configuration, validatorHelperMock.Object);
+            var result = objectUnderTest.IsLocalApiUrlValid();
 
             Assert.IsNotNull(result);
             Assert.IsTrue(result);
         }
         [TestMethod]
-        public void THROWS_EXCEPTION_IF_LOCAL_API_URL_IS_INVALID()
+        public void RETURN_FALSE_IF_LOCAL_API_URL_IS_INVALID()
         {
             IConfiguration configuration = CommonMethods.CreateMockConfigurationFromFile(APPSETTINGS_WITH_INVALID_DATA);
-            var localApiUrl = configuration.GetValue<string>("CQuerLocalAPIURL");
 
             var validatorHelperMock = new Mock<IValidatorHelper>();
-            var objectUnderTest = new AppSettingsValidator(validatorHelperMock.Object);
+            var objectUnderTest = new AppSettingsValidator(configuration, validatorHelperMock.Object);
+            var result = objectUnderTest.IsLocalApiUrlValid();
 
-            Assert.ThrowsException<Exception>(() => { objectUnderTest.IsLocalApiUrlValid(localApiUrl); },
-                "CQuer local API URL from appsettings.json is not valid!");
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result);
         }
         [TestMethod]
-        public void THROWS_EXCEPTION_IF_LOCAL_API_URL_IS_EMPTY()
+        public void RETURN_FALSE_IF_LOCAL_API_URL_IS_EMPTY()
         {
             IConfiguration configuration = CommonMethods.CreateMockConfigurationFromFile(APPSETTINGS_WITH_INVALID_DATA);
-            var localApiUrl = configuration.GetValue<string>("CQuerLocalAPIURL");
 
             var validatorHelperMock = new Mock<IValidatorHelper>();
-            var objectUnderTest = new AppSettingsValidator(validatorHelperMock.Object);
+            var objectUnderTest = new AppSettingsValidator(configuration, validatorHelperMock.Object);
+            var result = objectUnderTest.IsLocalApiUrlValid();
 
-            Assert.ThrowsException<Exception>(() => { objectUnderTest.IsLocalApiUrlValid(localApiUrl); },
-                "CQuer local API URL from appsettings.json is empty!");
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result);
         }
     }
 }

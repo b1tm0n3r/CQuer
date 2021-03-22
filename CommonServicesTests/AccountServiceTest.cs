@@ -20,8 +20,10 @@ namespace CommonServicesTests
         [TestInitialize()]
         public void StartUp()
         {
-            ACCOUNTS = new List<Account>();
-            ACCOUNTS.Add(new Account {Name = "test"});
+            ACCOUNTS = new List<Account>
+            {
+                new Account { Name = "test" }
+            };
         }
         [TestMethod]
         public void Register_CheckingBadRequest()

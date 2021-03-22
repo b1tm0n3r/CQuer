@@ -1,3 +1,4 @@
+using Common;
 using Common.MappingProfiles;
 using CommonServices;
 using Microsoft.AspNetCore.Builder;
@@ -14,7 +15,15 @@ namespace CQuerAPI
     {
         public Startup(IConfiguration configuration)
         {
+            ValidateConfigurationSettings(configuration);
             Configuration = configuration;
+        }
+
+        private static void ValidateConfigurationSettings(IConfiguration configuration)
+        {
+            AppSettingsValidator validatorHelper = new AppSettingsValidator(configuration, new ValidatorHelper());
+            if(!validatorHelper.IsConnectionStringValid() || !validatorHelper.IsFileStorePathValid() || !validatorHelper.IsLocalApiUrlValid())
+                throw new System.Exception(validatorHelper.ErrorMessageContainer);
         }
 
         public IConfiguration Configuration { get; }
