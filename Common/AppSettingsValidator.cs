@@ -1,27 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using System.Text;
 
 namespace Common
 {
-    public static class AppSettingsValidator
+    public class AppSettingsValidator
     {
-        public static bool IsFileStorePathValid(string fileStorePath)
+        private readonly IValidatorHelper _validatorHelper;
+        public AppSettingsValidator(IValidatorHelper validatorHelper)
         {
-            return true;
+            _validatorHelper = validatorHelper;
         }
-        public static bool IsLocalApiUrlValid(string localApiUrl)
+
+        public bool IsFileStorePathValid(string fileStorePath)
         {
+            if (fileStorePath.Equals("") || fileStorePath is null)
+                throw new Exception();
+            if (!Directory.Exists(fileStorePath))
+                throw new Exception();
+            if (!_validatorHelper.HaveRequiredPermissionsToFileStore(fileStorePath))
+                throw new Exception();
+            
             return true;
         }
 
-        public static bool IsConnectionStringValid(string connectionString)
+        public bool IsLocalApiUrlValid(string localApiUrl)
         {
-            CanEstablishConnectionWithDatabase(connectionString);
+            if (localApiUrl.Equals("") || localApiUrl is null)
+                throw new Exception();
+            if (!_validatorHelper.IsLocalAddress(localApiUrl))
+                throw new Exception("Invalid API address in configuration appsetings.json");
+
             return true;
         }
-        private static bool CanEstablishConnectionWithDatabase(string connectionString)
+
+        public bool IsConnectionStringValid(string connectionString)
         {
+            if (connectionString.Equals("") || connectionString is null)
+                throw new Exception();
+            if (!_validatorHelper.CanEstablishConnectionWithDatabase(connectionString))
+                throw new Exception();
+
             return true;
         }
     }
