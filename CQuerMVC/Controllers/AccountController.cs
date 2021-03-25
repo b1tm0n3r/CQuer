@@ -20,6 +20,11 @@ namespace CQuerMVC.Controllers
                 return RedirectToAction("UserPanel");
             return View(loginDto);
         }
+
+        public IActionResult Register()
+        {
+            return RedirectToAction("UserPanel");
+        }
         
         public IActionResult UserPanel()
         {
