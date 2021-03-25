@@ -2,6 +2,7 @@
 using Common.DataModels.IdentityManagement;
 using Common.DataModels.StandardEntities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Persistence.Context;
 
 namespace CommonServicesTests
@@ -11,6 +12,8 @@ namespace CommonServicesTests
         public DbSet<Account> Accounts { get; set; }
         public DbSet<FileReference> FileReferences { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
+        public DatabaseFacade Database { get; }
+
         public Task<int> SaveChangesAsync()
         {
             return Task.FromResult(1);

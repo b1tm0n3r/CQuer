@@ -1,0 +1,6 @@
+{
+  "ConnectionStrings": {
+    "CQuerDB": "Invalid Database Connection String"
+  },
+  "CQuerLocalAPIURL": "http://invalid-url.com/api"
+}

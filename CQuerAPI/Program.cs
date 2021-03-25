@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using CommonServices;
+using CommonServices.FileManager;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,7 +30,7 @@ namespace CQuerAPI
         {
             using var scope = host.Services.CreateScope();
             var services = scope.ServiceProvider;
-            var context = services.GetRequiredService<CQuerDbContext>();
+            var context = services.GetRequiredService<ICQuerDbContext>();
             //Testing purposes (exception thrown if directory in DefaultFileStorePath doesn't exist)
             services.GetRequiredService<IFileManagerService>();
             try

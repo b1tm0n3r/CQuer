@@ -1,4 +1,5 @@
 ﻿using CommonServices.DatabaseOperator;
+using CommonServices.HttpWebProxy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -8,26 +9,20 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace CommonServices
+namespace CommonServices.FileManager
 {
     public class FileManagerService : IFileManagerService
     {
-        private readonly IDatabaseConnector databaseConnector;
-        private readonly string basePath;
-        public FileManagerService(IConfiguration configuration, IDatabaseConnector databaseConnector)
+        private readonly IDatabaseConnector _databaseConnector;
+        private readonly IHttpWebClientProxy _httpWebClientProxy;
+        public FileManagerService(IDatabaseConnector databaseConnector, IHttpWebClientProxy httpWebClientProxy)
         {
-            this.databaseConnector = databaseConnector;
-            basePath = configuration.GetValue<string>("DefaultFileStorePath");
-            if(!FilestoreExists(basePath))
-            {
-                throw new Exception("Filestore doesn't exist!");
-            }
+            _databaseConnector = databaseConnector;
+            _httpWebClientProxy = httpWebClientProxy;
         }
         public void DownloadFileFromSource(string source, string destinationPath)
         {
-            using var webClient = new WebClient();
-
-            webClient.DownloadFile(source, destinationPath);
+            _httpWebClientProxy.DownloadFileFromUrl(source, destinationPath);
         }
         public byte[] GetFileByName(string fileName)
         {
@@ -35,17 +30,12 @@ namespace CommonServices
         }
         public string GetFilePath(string fileName)
         {
-            return databaseConnector.GetLocalFilePath(fileName);
+            return _databaseConnector.GetLocalFilePath(fileName);
         }
         private byte[] GetFile(string filePath)
         {
             return File.ReadAllBytes(filePath);
         }
-        private bool FilestoreExists(string defaultFilestorePath)
-        {
-            return Directory.Exists(@defaultFilestorePath);
-        }
-
         public string ComputeFileSHA256Checksum(string filePath)
         {
             using var sha256 = SHA256.Create();
