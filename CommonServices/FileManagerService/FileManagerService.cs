@@ -15,15 +15,10 @@ namespace CommonServices.FileManager
     {
         private readonly IDatabaseConnector _databaseConnector;
         private readonly IHttpWebClientProxy _httpWebClientProxy;
-        public FileManagerService(IConfiguration configuration, IDatabaseConnector databaseConnector, IHttpWebClientProxy httpWebClientProxy)
+        public FileManagerService(IDatabaseConnector databaseConnector, IHttpWebClientProxy httpWebClientProxy)
         {
             _databaseConnector = databaseConnector;
             _httpWebClientProxy = httpWebClientProxy;
-            var basePath = configuration.GetValue<string>("DefaultFileStorePath");
-            if(!FilestoreExists(basePath))
-            {
-                throw new Exception("Filestore doesn't exist!");
-            }
         }
         public void DownloadFileFromSource(string source, string destinationPath)
         {
@@ -40,10 +35,6 @@ namespace CommonServices.FileManager
         private byte[] GetFile(string filePath)
         {
             return File.ReadAllBytes(filePath);
-        }
-        private bool FilestoreExists(string defaultFilestorePath)
-        {
-            return Directory.Exists(@defaultFilestorePath);
         }
         public string ComputeFileSHA256Checksum(string filePath)
         {
