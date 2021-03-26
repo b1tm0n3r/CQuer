@@ -12,5 +12,7 @@ namespace Common.DataModels.StandardEntities
         [Required]
         [MaxLength(512)]
         public string Description { get; set; }
+        [Required]
+        public bool Active { get; set; }
     }
 }
