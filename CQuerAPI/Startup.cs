@@ -1,4 +1,5 @@
 using Common;
+using Common.Exceptions;
 using Common.MappingProfiles;
 using CommonServices;
 using Microsoft.AspNetCore.Builder;
@@ -23,7 +24,7 @@ namespace CQuerAPI
         {
             AppSettingsValidator validatorHelper = new AppSettingsValidator(configuration, new ValidatorHelper());
             if(!validatorHelper.IsConnectionStringValid() || !validatorHelper.IsFileStorePathValid() || !validatorHelper.IsLocalApiUrlValid())
-                throw new System.Exception(validatorHelper.ErrorMessageContainer);
+                throw new ConfigurationValidationException(validatorHelper.ErrorMessageContainer);
         }
 
         public IConfiguration Configuration { get; }

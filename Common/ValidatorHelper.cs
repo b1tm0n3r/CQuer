@@ -9,6 +9,8 @@ namespace Common
 {
     public class ValidatorHelper : IValidatorHelper
     {
+        private static readonly string CONNECTION_STRING_DATABASE = "Database";
+        private static readonly string CONNECTION_STRING_INITIAL_CATALOG = "Initial Catalog";
         private static readonly string TEST_FILE_NAME = "FileStore_Check.txt";
         private static readonly string TEST_FILE_DATA = "Temporary FileStore File";
 
@@ -26,7 +28,8 @@ namespace Common
                  * Exception will be thrown in first 15 seconds from app startup 
                  * Note: applicable when invalid connection string is located in appsettings.json 
                  */
-                using SqlConnection connection = new SqlConnection(connectionString);
+                var directSQLServerConnectionString = GetDirectSQLServerConnectionString(connectionString);
+                using SqlConnection connection = new SqlConnection(directSQLServerConnectionString);
                 connection.Open();
                 connection.Dispose();
                 return true;
@@ -36,6 +39,7 @@ namespace Common
                 return false;
             }
         }
+
         public bool HaveRequiredPermissionsToFileStore(string fileStorePath)
         {
             try
@@ -50,6 +54,24 @@ namespace Common
             {
                 return false;
             }
+        }
+
+        private string GetDirectSQLServerConnectionString(string connectionString)
+        {
+            var splittedConnectionString = connectionString.Split(";");
+            var directSQLServerConnectionStringBuilder = new StringBuilder();
+            for (int i = 0; i < splittedConnectionString.Length; i++)
+            {
+                if (splittedConnectionString[i].StartsWith(CONNECTION_STRING_DATABASE) 
+                    || splittedConnectionString[i].StartsWith(CONNECTION_STRING_INITIAL_CATALOG))
+                    continue;
+
+                directSQLServerConnectionStringBuilder.Append(splittedConnectionString[i]);
+
+                if (i != splittedConnectionString.Length - 1)
+                    directSQLServerConnectionStringBuilder.Append(";");
+            }
+            return directSQLServerConnectionStringBuilder.ToString();
         }
     }
 }
