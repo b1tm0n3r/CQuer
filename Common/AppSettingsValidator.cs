@@ -28,17 +28,17 @@ namespace Common
 
             if (fileStorePath.Equals("") || fileStorePath is null)
             {
-                ErrorMessageContainer = "Default File Store Path from appsettings.json is empty!";
+                ErrorMessageContainer = Resources.ConfigValidatorErrorMessages.EmptyFS;
                 return false;
             }
             if (!Directory.Exists(fileStorePath))
             {
-                ErrorMessageContainer = "FileStore path from appsettings.json points to non-existing directory!";
+                ErrorMessageContainer = Resources.ConfigValidatorErrorMessages.FSNotExists;
                 return false;
             }
             if (!_validatorHelper.HaveRequiredPermissionsToFileStore(fileStorePath))
             {
-                ErrorMessageContainer = "Missing Read/Write privileges to directory set as FileStore in appsettings.json";
+                ErrorMessageContainer = Resources.ConfigValidatorErrorMessages.FSInvalidPrivileges;
                 return false;
             }
             
@@ -51,12 +51,12 @@ namespace Common
 
             if (localApiUrl.Equals("") || localApiUrl is null)
             {
-                ErrorMessageContainer = "CQuer Local API URL from appsettings.json is empty!";
+                ErrorMessageContainer = Resources.ConfigValidatorErrorMessages.EmptyAPI;
                 return false;
             }
             if (!_validatorHelper.IsLocalAddress(localApiUrl))
             {
-                ErrorMessageContainer = "CQuer local API URL from appsettings.json is not valid! It should point to localhost or loopback IP address i.e. https://127.0.0.1:4444";
+                ErrorMessageContainer = Resources.ConfigValidatorErrorMessages.APINotLocal;
                 return false;
             }
 
@@ -69,12 +69,12 @@ namespace Common
 
             if (connectionString.Equals("") || connectionString is null)
             {
-                ErrorMessageContainer = "Connection string from appsettings.json is empty";
+                ErrorMessageContainer = Resources.ConfigValidatorErrorMessages.EmptyConnectionString;
                 return false;
             }
             if (!_validatorHelper.CanEstablishConnectionWithDatabase(connectionString))
             {
-                ErrorMessageContainer = "Cannot establish connection with database using connection string from appsettings.json";
+                ErrorMessageContainer = Resources.ConfigValidatorErrorMessages.DBConnFailed;
                 return false;
             }
 
