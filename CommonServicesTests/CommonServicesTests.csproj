@@ -17,11 +17,18 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CommonServices\CommonServices.csproj" />
+    <ProjectReference Include="..\CommonTests\CommonTests.csproj" />
     <ProjectReference Include="..\CQuerAPI\CQuerAPI.csproj" />
     <ProjectReference Include="..\CQuerMVC\CQuerMVC.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="resources\documentWithInlineChecksum.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="resources\documentWithoutChecksum.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="resources\testFile.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
