@@ -27,7 +27,7 @@ namespace CommonServices.HttpWebProxy
                 throw new Exception("Empty download URL parameter!");
 
             sha256Checksum = string.Empty;
-            var nodesWithHyperlinks = htmlDocument.DocumentNode.SelectNodes("//a");
+            var nodesWithHyperlinks = _htmlParser.GetAllNodesWithHyperlinks(htmlDocument);
             if (nodesWithHyperlinks is null)
                 return false;
 

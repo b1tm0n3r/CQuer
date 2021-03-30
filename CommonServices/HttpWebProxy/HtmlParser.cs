@@ -29,6 +29,23 @@ namespace CommonServices.HttpWebProxy
                 throw new Exception("Can't find direct file download link in HTML document!");
             return fileDownloadNode;
         }
+
+        public List<string> GetUrlsFromHtmlDocumentLinks(HtmlDocument htmlDocument)
+        {
+            List<string> gatheredUrls = new List<string>();
+            var nodesWithHyperlinks = GetAllNodesWithHyperlinks(htmlDocument);
+            foreach(var processedNode in nodesWithHyperlinks)
+            {
+                gatheredUrls.Add(processedNode.GetAttributeValue(HREF_ATTRIBUTE, ""));
+            }
+            return gatheredUrls;
+        }
+
+        public HtmlNodeCollection GetAllNodesWithHyperlinks(HtmlDocument htmlDocument)
+        {
+            return htmlDocument.DocumentNode.SelectNodes("//a");
+        }
+
         public HtmlNodeCollection GetSubnodesByParentName(HtmlNode htmlNode, string parentName)
         {
             return SearchParentForNode(htmlNode, parentName).ChildNodes;
