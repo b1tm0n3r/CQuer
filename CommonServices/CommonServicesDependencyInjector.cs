@@ -49,16 +49,15 @@ namespace CommonServices
             services.AddScoped<IAccountClientService, AccountClientService>();
             services.AddTransient<IRestClient, RestClient>();
         }
-        public static IServiceCollection AddIdentityServices(this IServiceCollection services)
+        public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
         {
-            var jwtSettings = new JwtSettings();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => 
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenSecretKey"])),
                         ValidateAudience = false,
                         ValidateIssuer = false
                     };

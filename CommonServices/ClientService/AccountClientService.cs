@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Common.DTOs;
 using RestSharp;
@@ -16,13 +18,12 @@ namespace CommonServices.ClientService
              _restClient.AddDefaultHeader("Content-Type", "application/json");
         }
         
-        public async Task<bool> LoginResponse(LoginDto loginDto)
+        public async Task<IRestResponse> LoginResponse(LoginDto loginDto)
         {
             var request = new RestRequest("login", Method.POST);
             request.AddJsonBody(loginDto);
             var response = await _restClient.ExecuteAsync(request);
-            
-            return response.IsSuccessful;
+            return response;
         }
     }
 }

@@ -1,6 +1,13 @@
-﻿using Common.DTOs;
+﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using Common.DTOs;
 using CommonServices.ClientService;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestSharp.Authenticators;
 
 namespace CQuerMVC.Controllers
 {
@@ -15,12 +22,18 @@ namespace CQuerMVC.Controllers
         
         public IActionResult Login(LoginDto loginDto)
         {
-            var response = _client.LoginResponse(loginDto);
-            if (response.Result)
-                return RedirectToAction("UserPanel");
-            return View(loginDto);
+            if (ModelState.IsValid)
+            {
+                var response = _client.LoginResponse(loginDto);
+                if (response.Result.IsSuccessful)
+                {
+                    return RedirectToAction("UserPanel");
+                }
+                return View(loginDto);
+            }
+            return View();
         }
-
+        
         public IActionResult Register()
         {
             return RedirectToAction("UserPanel");
