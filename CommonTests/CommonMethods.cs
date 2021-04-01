@@ -15,13 +15,19 @@ namespace CommonTests
 
         public static IConfiguration CreateMockConfigurationFromFile(string configurationFile)
         {
-            string workingDirectory = Path.GetFullPath(Directory.GetCurrentDirectory());
-            string configurationFilePath = workingDirectory + Path.DirectorySeparatorChar + RESOURCES_DIRECTORY + Path.DirectorySeparatorChar + configurationFile;
+            
+            string configurationFilePath = GetFilePathFromTestResources(configurationFile);
 
             return new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile(configurationFilePath)
                 .Build();
+        }
+
+        public static string GetFilePathFromTestResources(string file)
+        {
+            string workingDirectory = Path.GetFullPath(Directory.GetCurrentDirectory());
+            return workingDirectory + Path.DirectorySeparatorChar + RESOURCES_DIRECTORY + Path.DirectorySeparatorChar + file;
         }
 
         public static IConfiguration CreateConfigurationWithFileStorePath(string pathAddition = "")

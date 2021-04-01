@@ -15,7 +15,7 @@ namespace CommonServicesTests
     [TestClass]
     public class AccountServiceTest
     {
-        public static List<Account> ACCOUNTS;
+        private static List<Account> ACCOUNTS;
 
         [TestInitialize()]
         public void StartUp()
