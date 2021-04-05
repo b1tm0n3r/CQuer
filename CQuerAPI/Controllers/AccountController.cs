@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Common.DTOs;
 using CommonServices.AccountServices;
+using CommonServices.TokenService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CQuerAPI.Controllers
@@ -10,9 +11,12 @@ namespace CQuerAPI.Controllers
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
-        public AccountController(IAccountService accountService)
+        private readonly ITokenService _tokenService;
+
+        public AccountController(IAccountService accountService, ITokenService tokenService)
         {
             _accountService = accountService;
+            _tokenService = tokenService;
         }
 
         [HttpGet]
@@ -50,7 +54,7 @@ namespace CQuerAPI.Controllers
         }
         
         [HttpPost("login")]
-        public async Task<ActionResult> LoginAccount(LoginDto loginDto)
+        public async Task<ActionResult<UserDto>> LoginAccount(LoginDto loginDto)
         {
             var account = await _accountService.GetAccountFromLogin(loginDto);
 
@@ -58,9 +62,13 @@ namespace CQuerAPI.Controllers
                 return Unauthorized("Invalid username");
             
             var login = _accountService.Login(loginDto);
-            
+
             if (await login)
-                return Ok();
+                return new UserDto
+                {
+                    Username = loginDto.Username,
+                    Token = _tokenService.CreateToken(loginDto)
+                };
             return Unauthorized("Invalid password");
         }
         

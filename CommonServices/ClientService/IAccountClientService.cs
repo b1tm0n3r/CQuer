@@ -7,6 +7,6 @@ namespace CommonServices.ClientService
 {
     public interface IAccountClientService
     {
-        Task<bool> LoginResponse(LoginDto loginDto);
+        Task<IRestResponse> LoginResponse(LoginDto loginDto);
     }
 }
