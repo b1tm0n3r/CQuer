@@ -24,11 +24,17 @@ namespace CQuerMVC.Controllers
             _client = client;
         }
 
+        [EnumAuthorizeRole(AccountType.StandardUser)]
         public IActionResult UserPanel()
         {
             return View();
         }
         
+        [EnumAuthorizeRole(AccountType.Administrator)]
+        public IActionResult AdminPanel()
+        {
+            return View();
+        }
         
     }
 }

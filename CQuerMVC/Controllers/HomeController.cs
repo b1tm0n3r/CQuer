@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Common.DataModels.IdentityManagement;
 using Common.DTOs;
 using CommonServices.ClientService;
 using CQuerMVC.Helpers;
@@ -35,13 +36,17 @@ namespace CQuerMVC.Controllers
         
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            if (!ModelState.IsValid) return View();
+            if (!ModelState.IsValid) 
+                return View();
             var response = _clientService.LoginResponse(loginDto);
             var signInUser = Newtonsoft.Json.JsonConvert.DeserializeObject<UserDto>(response.Result.Content);
-            if (!response.Result.IsSuccessful) return View(loginDto);
-            
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, GeneratePrincipal.GetPrincipal(signInUser));
-            return RedirectToAction("UserPanel","Account");
+            if (response.Result.IsSuccessful)
+            {
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, GeneratePrincipal.GetPrincipal(signInUser));
+                return RedirectToAction(signInUser.AccountType==AccountType.StandardUser ? "UserPanel" : "AdminPanel", "Account");
+            }
+
+            return View();
         }
 
         public async Task<IActionResult> Logout()

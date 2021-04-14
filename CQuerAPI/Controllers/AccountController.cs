@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Common.DTOs;
 using CommonServices.AccountServices;
-using CommonServices.TokenService;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CQuerAPI.Controllers
@@ -11,12 +11,10 @@ namespace CQuerAPI.Controllers
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
-        private readonly ITokenService _tokenService;
 
-        public AccountController(IAccountService accountService, ITokenService tokenService)
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
-            _tokenService = tokenService;
         }
 
         [HttpGet]
@@ -66,8 +64,8 @@ namespace CQuerAPI.Controllers
             if (await login)
                 return new UserDto
                 {
-                    Username = loginDto.Username,
-                    Token = _tokenService.CreateToken(loginDto)
+                    Username = account.Name,
+                    AccountType = account.AccountType
                 };
             return Unauthorized("Invalid password");
         }

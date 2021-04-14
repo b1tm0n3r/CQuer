@@ -1,8 +1,10 @@
-﻿namespace Common.DTOs
+﻿using Common.DataModels.IdentityManagement;
+
+namespace Common.DTOs
 {
     public class UserDto
     {
         public string Username { get; set; }
-        public string Token { get; set; }
+        public AccountType AccountType { get; set; }
     }
 }

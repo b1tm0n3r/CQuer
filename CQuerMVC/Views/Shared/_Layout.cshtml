@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Common.DataModels.IdentityManagement
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -29,7 +30,15 @@
                 </ul>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="UserPanel">User Panel</a>
+                    @if (User.IsInRole(AccountType.StandardUser.ToString()))
+                    {
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="UserPanel">User Panel</a>
+                    }
+                    else
+                    {
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AdminPanel">Admin Panel</a>
+                    }
+                    
                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
                 }
                 else
