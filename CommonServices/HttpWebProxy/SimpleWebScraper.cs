@@ -32,28 +32,19 @@ namespace CommonServices.HttpWebProxy
                 return false;
 
             HtmlNode fileDownloadNode = _htmlParser.GetFileDownloadNodeByDirectUrl(directDownloadUrl, nodesWithHyperlinks);
-            var nodeCollectionWithSha256Substring = _htmlParser.SearchParentsWithSubstring(fileDownloadNode, SHA256);
-            if (nodeCollectionWithSha256Substring is null)
-                return false;
-
             if (!_htmlParser.IsNodePartOfTable(fileDownloadNode))
             {
                 sha256Checksum = GetSha256FromClosestHtmlParent(fileDownloadNode);
             }
             else
             {
-                var nodes = nodeCollectionWithSha256Substring.Nodes();
-                foreach (var node in nodes)
-                {
-                    var tableHeaderCell = _htmlParser.GetInnerNodeWithSubstring(node, SHA256);
-                    if (!_htmlParser.IsNodePartOfTableHeader(tableHeaderCell))
-                        continue;
+                var nodeCollectionWithSha256Substring = _htmlParser.SearchParentsWithSubstring(fileDownloadNode, SHA256);
+                if (nodeCollectionWithSha256Substring is null)
+                    return false;
 
-                    sha256Checksum = _htmlParser.GetDataFromTableByHeaderAndRow(tableHeaderCell, fileDownloadNode);
-                    if (!sha256Checksum.Equals(string.Empty))
-                        break;
-                }
+                sha256Checksum = GetSha256FromHtmlTable(fileDownloadNode, nodeCollectionWithSha256Substring);
             }
+            
             return !sha256Checksum.Equals(string.Empty);
         }
 
@@ -70,6 +61,24 @@ namespace CommonServices.HttpWebProxy
                     if (textBlock.Trim().Length == SHA256_HEX_LENGTH)
                         result = textBlock.ToUpper();
             }
+            return result;
+        }
+
+        private string GetSha256FromHtmlTable(HtmlNode fileDownloadNode, HtmlNodeCollection nodeCollectionWithSha256Substring)
+        {
+            var result = string.Empty;
+            var nodes = nodeCollectionWithSha256Substring.Nodes();
+            foreach (var node in nodes)
+            {
+                var tableHeaderCell = _htmlParser.GetInnerNodeWithSubstring(node, SHA256);
+                if (!_htmlParser.IsNodePartOfTableHeader(tableHeaderCell))
+                    continue;
+
+                result = _htmlParser.GetDataFromTableByHeaderAndRow(tableHeaderCell, fileDownloadNode);
+                if (!result.Equals(string.Empty))
+                    break;
+            }
+
             return result;
         }
     }
