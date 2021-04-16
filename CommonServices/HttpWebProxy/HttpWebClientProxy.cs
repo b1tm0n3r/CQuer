@@ -30,7 +30,7 @@ namespace CommonServices.HttpWebProxy
             var response = (HttpWebResponse)request.GetResponse();
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                sha256Checksum = "";
+                sha256Checksum = string.Empty;
                 return false;
             }
             else
