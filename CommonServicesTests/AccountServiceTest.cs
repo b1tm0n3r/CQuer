@@ -4,7 +4,6 @@ using AutoMapper;
 using Common.DataModels.IdentityManagement;
 using Common.DTOs;
 using CommonServices.AccountServices;
-using CommonServices.TokenService;
 using CQuerAPI.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -30,11 +29,10 @@ namespace CommonServicesTests
         public void Register_CheckingBadRequest()
         {
             var mapperMock = new Mock<IMapper>();
-            var tokenMock = new Mock<ITokenService>();
             var accountMock = ACCOUNTS.AsQueryable().BuildMockDbSet();
             DbContextStub dbContextStub = new DbContextStub(accountMock.Object);
             AccountService objectUnderTest = new AccountService(dbContextStub, mapperMock.Object);
-            var controller = new AccountController(objectUnderTest, tokenMock.Object);
+            var controller = new AccountController(objectUnderTest);
             
             var testData = new RegisterDto
             {
@@ -50,11 +48,10 @@ namespace CommonServicesTests
         public void Register_CheckingCreateRequest()
         {
             var mapperMock = new Mock<IMapper>();
-            var tokenMock = new Mock<ITokenService>();
             var accountMock = ACCOUNTS.AsQueryable().BuildMockDbSet();
             DbContextStub dbContextStub = new DbContextStub(accountMock.Object);
             AccountService objectUnderTest = new AccountService(dbContextStub, mapperMock.Object);
-            var controller = new AccountController(objectUnderTest, tokenMock.Object);
+            var controller = new AccountController(objectUnderTest);
             
             var testData = new RegisterDto
             {

@@ -11,7 +11,6 @@ using CommonServices.FileManager;
 using CommonServices.HttpWebProxy;
 using RestSharp;
 using CommonServices.ClientService;
-using CommonServices.TokenService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -48,27 +47,6 @@ namespace CommonServices
         {
             services.AddScoped<IAccountClientService, AccountClientService>();
             services.AddTransient<IRestClient, RestClient>();
-        }
-        public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
-        {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options => 
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenSecretKey"])),
-                        ValidateAudience = false,
-                        ValidateIssuer = false
-                    };
-                });
-
-            return services;
-        }
-        public static IServiceCollection AddTokenService(this IServiceCollection services)
-        {
-            services.AddScoped<ITokenService, TokenService.TokenService>();
-            return services;
         }
     }
 }

@@ -1,17 +1,28 @@
 ﻿using System.Diagnostics;
+using System.Net.Http;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Common.DataModels.IdentityManagement;
 using Common.DTOs;
 using CommonServices.ClientService;
+using CQuerMVC.Helpers;
 using CQuerMVC.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CQuerMVC.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IAccountClientService _clientService;
         private readonly ILogger<HomeController> _logger;
-        public HomeController(ILogger<HomeController> logger)
+
+        public HomeController(IAccountClientService clientService, ILogger<HomeController> logger)
         {
+            _clientService = clientService;
             _logger = logger;
         }
         public IActionResult Index()
@@ -22,15 +33,32 @@ namespace CQuerMVC.Controllers
         {
             return View();
         }
-        public IActionResult Login()
+        
+        public async Task<IActionResult> Login(LoginDto loginDto)
         {
+            if (!ModelState.IsValid) 
+                return View();
+            var response = _clientService.LoginResponse(loginDto);
+            var signInUser = Newtonsoft.Json.JsonConvert.DeserializeObject<UserDto>(response.Result.Content);
+            if (response.Result.IsSuccessful)
+            {
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, GeneratePrincipal.GetPrincipal(signInUser));
+                return RedirectToAction(signInUser.AccountType==AccountType.StandardUser ? "UserPanel" : "AdminPanel", "Account");
+            }
+
             return View();
         }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+        
         public IActionResult Register()
         {
             return View();
         }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
