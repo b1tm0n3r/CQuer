@@ -13,6 +13,12 @@ namespace Common.DataModels.StandardEntities
         [MaxLength(512)]
         public string Description { get; set; }
         [Required]
-        public bool Active { get; set; }
+        [Range(1,5)]
+        public int Severity { get; set; }
+        [Required]
+        public bool Solved { get; set; }
+        [Required]
+        public string DownloadUrl { get; set; }
+        public string Sha256Checksum { get; set; }
     }
 }
