@@ -6,13 +6,12 @@ using Common.DTOs;
 
 namespace CommonServices.TicketServices
 {
-    interface ITicketService
+    public interface ITicketService
     {
         Task<IEnumerable<TicketDto>> GetTickets();
         Task<int> Create(TicketDto ticketDto);
         Task<bool> Edit(int id, TicketDto ticketDto);
         Task<bool> Delete(int id, TicketDto ticketDto);
         Task<bool> Sumbit(int id);
-
     }
 }

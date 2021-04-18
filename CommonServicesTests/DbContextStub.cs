@@ -22,5 +22,9 @@ namespace CommonServicesTests
         {
             Accounts = accounts;
         }
+        public DbContextStub(DbSet<Ticket> tickets)
+        {
+            Tickets = tickets;
+        }
     }
 }
