@@ -13,7 +13,7 @@
                 <div class="form-group">
                     <label asp-for="Severity" class="form-label"></label>
                     <input asp-for="Severity" class="form-control" min="1" max="5" type="number" value="1">
-                </div>                
+                </div>
                 <div class="form-group">
                     <label asp-for="DownloadUrl" class="form-label"></label>
                     <input asp-for="DownloadUrl" class="form-control">
@@ -23,9 +23,12 @@
                     <input asp-for="Sha256Checksum" class="form-control">
                 </div>
 
-                <button class="btn btn-primary" >Create</button>
+                <button class="btn btn-primary">Create</button>
             </form>
         </div>
+        <form asp-action="Index">
+            <button>Back</button>
+        </form>
     </div>
 </div>
 
