@@ -25,43 +25,60 @@ namespace CommonServicesTests
                 new Account { Name = "test" }
             };
         }
+        
         [TestMethod]
-        public void Register_CheckingBadRequest()
+        public void Register_Task_Succesful()
         {
             var mapperMock = new Mock<IMapper>();
             var accountMock = ACCOUNTS.AsQueryable().BuildMockDbSet();
             DbContextStub dbContextStub = new DbContextStub(accountMock.Object);
             AccountService objectUnderTest = new AccountService(dbContextStub, mapperMock.Object);
-            var controller = new AccountController(objectUnderTest);
+            
+            var testData = new RegisterDto
+            {
+                Username = "test",
+                Password = "test"
+            };
+
+            var result = objectUnderTest.Register(testData).IsCompleted;
+            Assert.IsTrue(result);
+        }
+        
+        [TestMethod]
+        public void Register_Task_Faulted()
+        {
+            var mapperMock = new Mock<IMapper>();
+            var accountMock = ACCOUNTS.AsQueryable().BuildMockDbSet();
+            DbContextStub dbContextStub = new DbContextStub(accountMock.Object);
+            AccountService objectUnderTest = new AccountService(dbContextStub, mapperMock.Object);
             
             var testData = new RegisterDto
             {
                 Username = "test",
             };
-            
-            var result = controller.RegisterAccount(testData).Result;
-            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
-            Assert.IsNotNull(result);
+
+            var result = objectUnderTest.Register(testData).IsFaulted;
+            Assert.IsTrue(result);
         }
         
         [TestMethod]
-        public void Register_CheckingCreateRequest()
+        public void Register_Return_Id()
         {
             var mapperMock = new Mock<IMapper>();
             var accountMock = ACCOUNTS.AsQueryable().BuildMockDbSet();
             DbContextStub dbContextStub = new DbContextStub(accountMock.Object);
             AccountService objectUnderTest = new AccountService(dbContextStub, mapperMock.Object);
-            var controller = new AccountController(objectUnderTest);
             
             var testData = new RegisterDto
             {
-                Username = "user2", //type unique username here
-                Password = "password",
+                Username = "test",
+                Password = "test"
             };
-            
-            var result = controller.RegisterAccount(testData).Result;
-            Assert.IsInstanceOfType(result, typeof(CreatedResult));
-            Assert.IsNotNull(result);
+
+            var result = objectUnderTest.Register(testData).Result;
+            Assert.IsInstanceOfType(result, typeof(int));
         }
+        
+        
     }
 }
