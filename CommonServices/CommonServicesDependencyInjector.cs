@@ -1,24 +1,19 @@
 ﻿using CommonServices.DatabaseOperator;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Persistence.Context;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using AutoMapper;
 using CommonServices.AccountServices;
 using CommonServices.FileManager;
 using CommonServices.HttpWebProxy;
 using RestSharp;
-using CommonServices.ClientService;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using CommonServices.TicketServices;
+using CommonServices.ClientService.TicketClient;
+using CommonServices.ClientService.AccountClient;
 
 namespace CommonServices
 {
     public static class CommonServicesDependencyInjector
     {
+        private static readonly string API_CONFIGURATION_OPTION = "CQuerLocalAPIURL";
         public static IServiceCollection AddCommonServices(this IServiceCollection services)
         {
             AddDatabaseConnector(services);
@@ -45,10 +40,17 @@ namespace CommonServices
         {
             services.AddTransient<IHttpWebClientProxy, HttpWebClientProxy>();
         }
-        public static void AddClientService(this IServiceCollection services)
+        public static void AddApiClientServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IAccountClientService, AccountClientService>();
             services.AddTransient<IRestClient, RestClient>();
+            services.AddScoped<IAccountClientService>(provider => 
+                new AccountClientService(provider.GetRequiredService<IRestClient>(), 
+                    configuration.GetValue<string>(API_CONFIGURATION_OPTION))
+            );
+            services.AddScoped<ITicketClientService>(provider =>
+                new TicketClientService(provider.GetRequiredService<IRestClient>(),
+                    configuration.GetValue<string>(API_CONFIGURATION_OPTION))
+            );
         }
         public static void AddTicketService(this IServiceCollection services)
         {
