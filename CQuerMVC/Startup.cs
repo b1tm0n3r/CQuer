@@ -1,3 +1,5 @@
+using Common;
+using Common.Exceptions;
 using CommonServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -12,10 +14,17 @@ namespace CQuerMVC
     {
         public Startup(IConfiguration configuration)
         {
+            ValidateApiUrl(configuration);
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
+        private static void ValidateApiUrl(IConfiguration configuration)
+        {
+            AppSettingsValidator validatorHelper = new AppSettingsValidator(configuration, new ValidatorHelper());
+            if (!validatorHelper.IsLocalApiUrlValid())
+                throw new ConfigurationValidationException(validatorHelper.ErrorMessageContainer);
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -33,7 +42,7 @@ namespace CQuerMVC
                 });
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
-            services.AddClientService();
+            services.AddApiClientServices(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
