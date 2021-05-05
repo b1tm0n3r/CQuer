@@ -15,50 +15,53 @@ namespace CQuerAPI.Controllers
         {
             _ticketService = ticketService;
         }
+
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<TicketDto>>> GetAllTickets()
         {
             var tickets = await _ticketService.GetTickets();
             return tickets.ToList();
         }
+        [HttpPost("create")]
         public async Task<ActionResult> Create(TicketDto ticketDto)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             var id = await _ticketService.Create(ticketDto);
 
-            return Created($"/api/account/{id}", null);
+            return Created($"/api/ticket/{id}", null);
         }
-        public async Task<ActionResult<TicketDto>> Edit([FromRoute]int id, TicketDto ticketDto)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<TicketDto>> Update([FromRoute] int id, TicketDto ticketDto)
         {
             if (!ModelState.IsValid)
                 BadRequest(ModelState);
 
-            var ticket = await _ticketService.Edit(id, ticketDto);
-            if (!ticket)
+            var updateStatus = await _ticketService.Update(id, ticketDto);
+            if (!updateStatus)
                 return NotFound();
             return Ok();
         }
-        public async Task<ActionResult<TicketDto>> Delete(int id, TicketDto ticketDto)
+        [HttpPut("{id}/finalize")]
+        public async Task<ActionResult<TicketDto>> Finalize([FromRoute] int id)
         {
             if (!ModelState.IsValid)
                 BadRequest(ModelState);
 
-            var ticket = await _ticketService.Delete(id, ticketDto);
-            if (!ticket)
+            var finalizeStatus = await _ticketService.Finalize(id);
+            if (!finalizeStatus)
                 return NotFound();
             return Ok();
         }
-
-        public async Task<ActionResult<TicketDto>> Sumbit(int id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<TicketDto>> Delete(int id)
         {
             if (!ModelState.IsValid)
                 BadRequest(ModelState);
 
-            var ticket = await _ticketService.Sumbit(id);
-            if (!ticket)
+            var deleteStatus = await _ticketService.Delete(id);
+            if (!deleteStatus)
                 return NotFound();
             return Ok();
         }

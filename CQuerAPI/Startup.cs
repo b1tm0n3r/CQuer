@@ -36,7 +36,8 @@ namespace CQuerAPI
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "CQuerAPI", Version = "v1"}); });
             services.AddPersistence(Configuration);
             services.AddCommonServices();
-            services.AddAutoMapper(x=>x.AddProfile<AccountMapperProfile>(), typeof(Startup));
+            services.AddAutoMapper(x=>x.AddProfile<AccountMapperProfile>(), typeof(Startup));           
+            services.AddAutoMapper(x=>x.AddProfile<TicketMapperProfile>(), typeof(Startup));           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
