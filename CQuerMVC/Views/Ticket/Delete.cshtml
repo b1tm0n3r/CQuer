@@ -1,0 +1,14 @@
+﻿@model TicketIdViewModel
+<div class="box">
+    <div class="justify-content-center align-items-center">
+        <div class="mb-3 mt-3">
+            Are you sure to delete ticket ?
+            
+            <form method="post" asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <button> YES </button>
+            </form>
+        </div>
+    </div>
+</div>
+

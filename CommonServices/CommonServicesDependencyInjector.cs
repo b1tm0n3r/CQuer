@@ -13,6 +13,7 @@ using RestSharp;
 using CommonServices.ClientService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using CommonServices.TicketServices;
 
 namespace CommonServices
 {
@@ -24,6 +25,7 @@ namespace CommonServices
             AddFileManager(services);
             AddAccountService(services);
             AddHttpWebClientProxy(services);
+            AddTicketService(services);
             return services;
         }
 
@@ -48,5 +50,10 @@ namespace CommonServices
             services.AddScoped<IAccountClientService, AccountClientService>();
             services.AddTransient<IRestClient, RestClient>();
         }
+        public static void AddTicketService(this IServiceCollection services)
+        {
+            services.AddScoped<ITicketService, TicketService>();
+        }
+
     }
 }
