@@ -25,27 +25,36 @@ namespace CQuerMVC.Controllers
             _clientService = clientService;
             _logger = logger;
         }
+        
         public IActionResult Index()
         {
             return View();
         }
+        
         public IActionResult Privacy()
         {
             return View();
         }
         
+        public IActionResult Login()
+        {
+            return View();
+        }
+        
+        [HttpPost]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
                 return View();
+
             var response = _clientService.LoginResponse(loginDto);
-            var signInUser = Newtonsoft.Json.JsonConvert.DeserializeObject<UserDto>(response.Result.Content);
             if (response.Result.IsSuccessful)
             {
+                var signInUser = Newtonsoft.Json.JsonConvert.DeserializeObject<UserDto>(response.Result.Content);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, GeneratePrincipal.GetPrincipal(signInUser));
                 return RedirectToAction(signInUser.AccountType==AccountType.StandardUser ? "UserPanel" : "AdminPanel", "Account");
             }
-
+            ModelState.AddModelError(nameof(LoginDto.Password),"Invalid username or password!");
             return View();
         }
 
