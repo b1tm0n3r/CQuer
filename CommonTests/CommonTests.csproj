@@ -43,7 +43,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CommonServices\CommonServices.csproj" />
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\CQuerAPI\CQuerAPI.csproj" />
   </ItemGroup>
 
 </Project>
