@@ -6,9 +6,10 @@ using System.Text;
 namespace Common.DTOs
 {
     public class TicketDto
-    {
+    {       
+        public int Id { get; set; }
         [Required]
-        public int CreatorId { get; set; }
+        public string Username { get; set; }
         [Required]
         public string Description { get; set; }
         [Required]

@@ -10,8 +10,8 @@ namespace CommonServices.TicketServices
     {
         Task<IEnumerable<TicketDto>> GetTickets();
         Task<int> Create(TicketDto ticketDto);
-        Task<bool> Edit(int id, TicketDto ticketDto);
-        Task<bool> Delete(int id, TicketDto ticketDto);
-        Task<bool> Sumbit(int id);
+        Task<bool> Update(int id, TicketDto ticketDto);
+        Task<bool> Delete(int id);
+        Task<bool> Finalize(int id);
     }
 }

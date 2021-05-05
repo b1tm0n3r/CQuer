@@ -24,9 +24,11 @@ namespace CommonServices.TicketServices
 
         public async Task<int> Create(TicketDto ticketDto)
         {
+            var creatorId = _dbContext.Accounts.Where(x => x.Name.Equals(ticketDto.Username))
+                .FirstOrDefault().AccountId;
             var ticket = new Ticket
             {
-                CreatorId = ticketDto.CreatorId, 
+                CreatorId = creatorId, 
                 Description = ticketDto.Description,
                 DownloadUrl = ticketDto.DownloadUrl,
                 Severity = ticketDto.Severity,
@@ -40,7 +42,7 @@ namespace CommonServices.TicketServices
             return ticket.Id;
         }
 
-        public async Task<bool> Delete(int id, TicketDto ticketDto)
+        public async Task<bool> Delete(int id)
         {
             var ticket = await _dbContext.Tickets.FirstOrDefaultAsync(x => x.Id == id);
 
@@ -54,7 +56,7 @@ namespace CommonServices.TicketServices
             return true;
         }
 
-        public async Task<bool> Edit(int id, TicketDto ticketDto)
+        public async Task<bool> Update(int id, TicketDto ticketDto)
         {
             var ticket = _dbContext.Tickets.FirstOrDefault(x => x.Id == id);
 
@@ -70,7 +72,7 @@ namespace CommonServices.TicketServices
             return true;
         }
 
-        public async Task<bool> Sumbit(int id)
+        public async Task<bool> Finalize(int id)
         {
             var ticket = _dbContext.Tickets.FirstOrDefault(x => x.Id == id);
 

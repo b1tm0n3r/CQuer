@@ -25,6 +25,7 @@ namespace CommonServices
             AddFileManager(services);
             AddAccountService(services);
             AddHttpWebClientProxy(services);
+            AddTicketService(services);
             return services;
         }
 
