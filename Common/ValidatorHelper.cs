@@ -16,7 +16,7 @@ namespace Common
 
         public bool IsLocalAddress(string localApiUrl)
         {
-            var regex = new Regex(@"^https?://(127\.0\.0\.1|localhost):\d{1,5}");
+            var regex = new Regex(@"^https?://(127\.0\.0\.1|localhost):\d{1,5}/api/$");
             return regex.IsMatch(localApiUrl);
         }
         public bool CanEstablishConnectionWithDatabase(string connectionString)
