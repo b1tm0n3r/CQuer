@@ -2,5 +2,5 @@
   "ConnectionStrings": {
     "CQuerDB": "Data Source=test\\test;Initial Catalog=testDatabase"
   },
-  "CQuerLocalAPIURL": "http://127.0.0.1:4444/api"
+  "CQuerLocalAPIURL": "http://127.0.0.1:4444/api/"
 }
