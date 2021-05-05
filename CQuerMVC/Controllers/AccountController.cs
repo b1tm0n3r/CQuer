@@ -5,8 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Common.DataModels.IdentityManagement;
 using Common.DTOs;
-using CommonServices.ClientService;
-using CommonServices.TicketServices;
+using CommonServices.ClientService.AccountClient;
 using CQuerMVC.Helpers;
 using CQuerMVC.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -22,7 +21,7 @@ namespace CQuerMVC.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountClientService _client;
-        public AccountController(IAccountClientService client, IRestClient restClient)
+        public AccountController(IAccountClientService client)
         {
             _client = client;
         }

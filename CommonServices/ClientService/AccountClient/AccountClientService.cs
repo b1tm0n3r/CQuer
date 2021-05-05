@@ -5,19 +5,15 @@ using System.Threading.Tasks;
 using Common.DTOs;
 using RestSharp;
 
-namespace CommonServices.ClientService
+namespace CommonServices.ClientService.AccountClient
 {
-    public class AccountClientService : IAccountClientService
+    public class AccountClientService : ClientService, IAccountClientService
     {
-        private readonly IRestClient _restClient;
-        
-        public AccountClientService(IRestClient restClient)
+        private static readonly string ACCOUNT_API_PATH = "account/";
+        public AccountClientService(IRestClient restClient, string baseUrl) : base(restClient, baseUrl)
         {
-             _restClient = restClient;
-             _restClient.BaseUrl = new Uri("https://localhost:6001/api/account/");
-             _restClient.AddDefaultHeader("Content-Type", "application/json");
+            _restClient.BaseUrl = new Uri(_restClient.BaseUrl + ACCOUNT_API_PATH);
         }
-        
         public async Task<IRestResponse> LoginResponse(LoginDto loginDto)
         {
             var request = new RestRequest("login", Method.POST);
