@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Common.DataModels.IdentityManagement;
 using Common.DTOs;
-using CommonServices.ClientService;
+using CommonServices.ClientService.AccountClient;
 using CQuerMVC.Helpers;
 using CQuerMVC.Models;
 using Microsoft.AspNetCore.Authentication;

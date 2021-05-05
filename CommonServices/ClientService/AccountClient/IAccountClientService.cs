@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Common.DTOs;
 using RestSharp;
 
-namespace CommonServices.ClientService
+namespace CommonServices.ClientService.AccountClient
 {
     public interface IAccountClientService
     {
