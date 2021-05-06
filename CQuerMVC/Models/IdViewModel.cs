@@ -1,18 +1,19 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace CQuerMVC.Models
 {
-    public class TicketIdViewModel
+    public class IdViewModel
     {
         public int Id { get; set; }
-        public TicketIdViewModel(int id)
+        public IdViewModel(int id)
         {
             Id = id;
         }
-        public TicketIdViewModel()
+        public IdViewModel()
         {
 
         }
