@@ -23,6 +23,13 @@ namespace CommonServices.ClientService.TicketClient
             return JsonConvert.DeserializeObject<IEnumerable<TicketDto>>(response.Content);
         }
 
+        public async Task<TicketDto> GetTicket(int id)
+        {
+            var request = new RestRequest(id.ToString(), Method.GET);
+            var response = await _restClient.ExecuteAsync(request);
+            return JsonConvert.DeserializeObject<TicketDto>(response.Content);
+        }
+
         public async Task<IRestResponse> CreateTicket(TicketDto ticketDto)
         {
             var request = new RestRequest("Create", Method.POST);

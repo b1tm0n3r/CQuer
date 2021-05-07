@@ -22,6 +22,17 @@ namespace CQuerAPI.Controllers
             var tickets = await _ticketService.GetTickets();
             return tickets.ToList();
         }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TicketDto>> GetTicketById([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+                BadRequest(ModelState);
+
+            var ticketDto = await _ticketService.GetTicket(id);
+            if (ticketDto is null)
+                return NotFound();
+            return ticketDto;
+        }
         [HttpPost("create")]
         public async Task<ActionResult> Create(TicketDto ticketDto)
         {

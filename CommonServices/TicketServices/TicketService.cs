@@ -91,5 +91,12 @@ namespace CommonServices.TicketServices
 
             return ticketsDto;
         }
+        public async Task<TicketDto> GetTicket(int id)
+        {
+            var ticket = await _dbContext.Tickets.FirstOrDefaultAsync(x => x.Id == id);
+            var ticketDto = _mapper.Map<TicketDto>(ticket);
+
+            return ticketDto;
+        }
     }
 }
