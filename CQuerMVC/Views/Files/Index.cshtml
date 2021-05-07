@@ -1,0 +1,32 @@
+﻿@model FilesViewModel
+@using Common.DataModels.IdentityManagement
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<table class="table table-striped table-bordered table-dark">
+    <tr>
+        <td>File Name</td>
+        <td>Checksum</td>
+        <td>Upload Date</td>
+        @if (User.IsInRole(AccountType.Administrator.ToString()))
+        {
+            <td>Actions</td>
+        }
+    </tr>
+    @foreach (var item in Model.Files)
+    {
+        <tr>
+            <td>@item.FileName</td>
+            <td>@item.SHA256Hash</td>
+            <td>@item.UploadDate</td>
+            @if (User.IsInRole(AccountType.Administrator.ToString()))
+            {
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Remove</a>
+                </td>
+            }
+        </tr>
+    }
+</table>

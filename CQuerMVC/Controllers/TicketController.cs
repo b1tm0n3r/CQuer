@@ -1,6 +1,8 @@
-﻿using Common.DTOs;
+﻿using Common.DataModels.IdentityManagement;
+using Common.DTOs;
 using CommonServices.ClientService.TicketClient;
 using CommonServices.TicketServices;
+using CQuerMVC.Helpers;
 using CQuerMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
@@ -55,12 +57,13 @@ namespace CQuerMVC.Controllers
         }
         public IActionResult Finalize(int id)
         {
-            return View(new TicketIdViewModel(id));
+            return View(new IdViewModel(id));
         }
         [HttpPost]
-        public async Task<IActionResult> Finalize(TicketIdViewModel ticketIdViewModel)
+        [EnumAuthorizeRole(AccountType.Administrator)]
+        public async Task<IActionResult> Finalize(IdViewModel idViewModel)
         {
-            var result = await _ticketClientService.FinalizeTicket(ticketIdViewModel.Id);
+            var result = await _ticketClientService.FinalizeTicket(idViewModel.Id);
             if (!result.IsSuccessful)
                 return RedirectToAction("Error");
 
@@ -68,13 +71,14 @@ namespace CQuerMVC.Controllers
         }
         public IActionResult Delete(int id)
         {
-            return View(new TicketIdViewModel(id));
+            return View(new IdViewModel(id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(TicketIdViewModel ticketIdViewModel) 
+        [EnumAuthorizeRole(AccountType.Administrator)]
+        public async Task<IActionResult> Delete(IdViewModel idViewModel) 
         {
-            var result = await _ticketClientService.DeleteTicket(ticketIdViewModel.Id);
+            var result = await _ticketClientService.DeleteTicket(idViewModel.Id);
             if (!result.IsSuccessful)
                 return RedirectToAction("Error");
 

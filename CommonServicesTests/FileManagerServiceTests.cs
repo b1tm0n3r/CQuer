@@ -1,4 +1,5 @@
-﻿using CommonServices;
+﻿using AutoMapper;
+using CommonServices;
 using CommonServices.DatabaseOperator;
 using CommonServices.FileManager;
 using CommonServices.HttpWebProxy;
@@ -15,6 +16,7 @@ namespace CommonServicesTests
     [TestClass]
     public class FileManagerServiceTests
     {
+        private static readonly string TEST_FILESTORE = "TEST";
         const string RESOURCES_DIRECTORY = "resources";
         const string TEST_FILE = "testFile.txt";
         const string MODIFIED_TEST_FILE = "testFile2.txt";
@@ -22,9 +24,11 @@ namespace CommonServicesTests
         [TestMethod]
         public void Can_Get_Correct_SHA256_Checksum()
         {
-            var mockDatabaseConnector = new Mock<IDatabaseConnector>();
+            var mockDbContext = new Mock<DbContextStub>();
             var mockHttpWebClientProxy = new Mock<IHttpWebClientProxy>();
-            FileManagerService objectUnderTest = new FileManagerService(mockDatabaseConnector.Object, mockHttpWebClientProxy.Object);
+            var mockMapper = new Mock<IMapper>();
+            FileManagerService objectUnderTest = new FileManagerService(mockDbContext.Object, 
+                mockHttpWebClientProxy.Object, mockMapper.Object, TEST_FILESTORE);
 
             string workingDirectory = Path.GetFullPath(Directory.GetCurrentDirectory());
             string testFilePath = workingDirectory + Path.DirectorySeparatorChar + RESOURCES_DIRECTORY + Path.DirectorySeparatorChar + TEST_FILE;
@@ -37,9 +41,11 @@ namespace CommonServicesTests
         [TestMethod]
         public void Modified_File_Has_Incorrect_Checksum()
         {
-            var mockDatabaseConnector = new Mock<IDatabaseConnector>();
+            var mockDbContext = new Mock<DbContextStub>();
             var mockHttpWebClientProxy = new Mock<IHttpWebClientProxy>();
-            FileManagerService objectUnderTest = new FileManagerService(mockDatabaseConnector.Object, mockHttpWebClientProxy.Object);
+            var mockMapper = new Mock<IMapper>();
+            FileManagerService objectUnderTest = new FileManagerService(mockDbContext.Object,
+                mockHttpWebClientProxy.Object, mockMapper.Object, TEST_FILESTORE);
 
             string workingDirectory = Path.GetFullPath(Directory.GetCurrentDirectory());
             string testFilePath = workingDirectory + Path.DirectorySeparatorChar + RESOURCES_DIRECTORY + Path.DirectorySeparatorChar + TEST_FILE;

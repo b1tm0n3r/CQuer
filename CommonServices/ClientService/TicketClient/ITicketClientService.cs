@@ -10,6 +10,7 @@ namespace CommonServices.ClientService.TicketClient
     public interface ITicketClientService
     {
         public Task<IEnumerable<TicketDto>> GetTickets();
+        public Task<TicketDto> GetTicket(int id);
         public Task<IRestResponse> CreateTicket(TicketDto ticketDto);
         public Task<IRestResponse> UpdateTicket(TicketDto ticketDto);
         public Task<IRestResponse> FinalizeTicket(int ticketId);
