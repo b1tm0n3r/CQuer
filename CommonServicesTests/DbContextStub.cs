@@ -18,6 +18,10 @@ namespace CommonServicesTests
         {
             return Task.FromResult(1);
         }
+        public DbContextStub()
+        {
+            
+        }
         public DbContextStub(DbSet<Account> accounts)
         {
             Accounts = accounts;
