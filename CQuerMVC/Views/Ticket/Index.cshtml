@@ -32,6 +32,12 @@
                         {
                             <a asp-action="Finalize" asp-route-id="@item.Id">Finalize</a>
                             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <form asp-controller="Files" asp-action="Resolver">
+                                <input name="TicketId" type="hidden" asp-for="@item.Id" />
+                                <input name="DownloadUrl" type="hidden" asp-for="@item.DownloadUrl" />
+                                <input name="Sha256Checksum" type="hidden" asp-for="@item.Sha256Checksum" />
+                                <button>Resolve</button>
+                            </form>
                         }
                     </td>
                 </tr>

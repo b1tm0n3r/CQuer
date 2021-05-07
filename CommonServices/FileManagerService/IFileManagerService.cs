@@ -1,15 +1,19 @@
-﻿using System;
+﻿using Common.DTOs;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CommonServices.FileManager
 {
     public interface IFileManagerService
     {
-        void DownloadFileFromSource(string source, string destinationPath);
-        string GetFilePath(string fileName);
-        byte[] GetFileByName(string filePath);
-        string ComputeFileSHA256Checksum(string filePath);
+        public Task<int> DownloadFileFromSource(string source);
+        public Task<int> RemoveFile(int id);
+        public IEnumerable<FileReferenceDto> GetFileReferences();
+        public string GetFilePath(string fileName);
+        public byte[] GetFileByName(string filePath);
+        public string ComputeFileSHA256Checksum(string filePath);
     }
 }
