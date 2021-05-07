@@ -86,7 +86,7 @@ namespace CommonServices.TicketServices
         }
         public async Task<IEnumerable<TicketDto>> GetTickets()
         {
-            var tickets = await _dbContext.Tickets.ToListAsync();
+            var tickets = await _dbContext.Tickets.OrderByDescending(x => x.Severity).ToListAsync();
             var ticketsDto = _mapper.Map<IEnumerable<TicketDto>>(tickets);
 
             return ticketsDto;

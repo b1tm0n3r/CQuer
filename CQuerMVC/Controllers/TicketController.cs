@@ -1,6 +1,8 @@
-﻿using Common.DTOs;
+﻿using Common.DataModels.IdentityManagement;
+using Common.DTOs;
 using CommonServices.ClientService.TicketClient;
 using CommonServices.TicketServices;
+using CQuerMVC.Helpers;
 using CQuerMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
@@ -58,6 +60,7 @@ namespace CQuerMVC.Controllers
             return View(new IdViewModel(id));
         }
         [HttpPost]
+        [EnumAuthorizeRole(AccountType.Administrator)]
         public async Task<IActionResult> Finalize(IdViewModel idViewModel)
         {
             var result = await _ticketClientService.FinalizeTicket(idViewModel.Id);
@@ -72,6 +75,7 @@ namespace CQuerMVC.Controllers
         }
 
         [HttpPost]
+        [EnumAuthorizeRole(AccountType.Administrator)]
         public async Task<IActionResult> Delete(IdViewModel idViewModel) 
         {
             var result = await _ticketClientService.DeleteTicket(idViewModel.Id);
