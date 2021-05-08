@@ -1,3 +1,4 @@
+using AutoMapper;
 using Common;
 using Common.Exceptions;
 using Common.MappingProfiles;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Persistence;
+using System.Collections.Generic;
 
 namespace CQuerAPI
 {
@@ -36,9 +38,13 @@ namespace CQuerAPI
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "CQuerAPI", Version = "v1"}); });
             services.AddPersistence(Configuration);
             services.AddCommonServices(Configuration);
-            services.AddAutoMapper(x=>x.AddProfile<AccountMapperProfile>(), typeof(Startup));
-            services.AddAutoMapper(x=>x.AddProfile<TicketMapperProfile>(), typeof(Startup));
-            services.AddAutoMapper(x => x.AddProfile<FileReferenceMapperProfile>(), typeof(Startup));
+            services.AddAutoMapper(x => x.AddProfiles(new List<Profile>()
+                {
+                    new AccountMapperProfile(),
+                    new FileReferenceMapperProfile(),
+                    new TicketMapperProfile()
+                }
+            ), typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
