@@ -27,20 +27,20 @@ namespace CommonServices.HttpWebProxy
         public bool TryDownloadSha256ChecksumFromFile(string sourceUrl, out string sha256Checksum)
         {
             HttpWebRequest request = WebRequest.CreateHttp(sourceUrl);
-            var response = (HttpWebResponse)request.GetResponse();
-            if (response.StatusCode != HttpStatusCode.OK)
+            try
             {
-                sha256Checksum = string.Empty;
-                return false;
-            }
-            else
-            {
+                var response = (HttpWebResponse)request.GetResponse();
                 using var streamReader = new StreamReader(response.GetResponseStream());
                 var responseText = streamReader.ReadToEnd();
 
                 sha256Checksum = HtmlParser.GetSha256ChecksumFromString(responseText);
 
                 return true;
+            } 
+            catch
+            {
+                sha256Checksum = string.Empty;
+                return false;
             }
         }
 
