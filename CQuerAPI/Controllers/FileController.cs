@@ -23,17 +23,17 @@ namespace CQuerAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> DownloadFile(DownloadReferenceDto downloadReferenceDto)
+        public async Task<ActionResult<int>> DownloadFile(DownloadReferenceDto downloadReferenceDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await _fileManagerService.DownloadFileFromSource(downloadReferenceDto.DownloadUrl);
-            return Ok();
+            var fileReferenceId = await _fileManagerService.DownloadFileFromSource(downloadReferenceDto);
+            return Ok(fileReferenceId);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<TicketDto>> RemoveFile(int id)
+        public async Task<ActionResult> RemoveFile(int id)
         {
             if (!ModelState.IsValid)
                 BadRequest(ModelState);
@@ -42,5 +42,14 @@ namespace CQuerAPI.Controllers
             return Ok();
         }
 
+        [HttpPut("{id}/validate")]
+        public async Task<ActionResult> ValidateChecksum(int id)
+        {
+            if (!ModelState.IsValid)
+                BadRequest(ModelState);
+
+            await _fileManagerService.VerifyChecksum(id);
+            return Ok();
+        }
     }
 }

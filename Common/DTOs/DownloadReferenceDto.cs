@@ -8,17 +8,9 @@ namespace Common.DTOs
     public class DownloadReferenceDto
     {
         [Required]
-        public string DownloadUrl { get; set; }
+        public int TicketId { get; set; }
         [Required]
-        public string SHA256Hash { get; set; }
-        public DownloadReferenceDto(string downloadUrl, string checksum)
-        {
-            DownloadUrl = downloadUrl;
-            SHA256Hash = checksum;
-        }
-        public DownloadReferenceDto()
-        {
-
-        }
+        public string DownloadUrl { get; set; }
+        public string Sha256Checksum { get; set; }
     }
 }

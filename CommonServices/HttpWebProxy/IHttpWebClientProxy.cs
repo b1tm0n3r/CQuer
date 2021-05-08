@@ -8,6 +8,7 @@ namespace CommonServices.HttpWebProxy
     public interface IHttpWebClientProxy
     {
         public void DownloadFileFromUrl(string sourceUrl, string destinationPath);
-        public bool TryDownloadSHA256ChecksumFromFile(string sourceUrl, out string sha256Checksum);
+        public bool TryDownloadSha256ChecksumFromFile(string sourceUrl, out string sha256Checksum);
+        public bool TryExtractSha256ChecksumFromPage(string sourceUrl, string directDownloadUrl, out string sha256Checksum);
     }
 }
