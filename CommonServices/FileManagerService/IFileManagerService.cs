@@ -10,7 +10,8 @@ namespace CommonServices.FileManager
     public interface IFileManagerService
     {
         public Task<int> DownloadFileFromSource(DownloadReferenceDto downloadReferenceDto);
-        public Task<int> RemoveFile(int id);
+        public Task<int> RemoveFileWithReference(int id);
+        public Task<int> RemoveAssociatedFilesWithReferences(int ticketId);
         public IEnumerable<FileReferenceDto> GetFileReferences();
         public Task<bool> VerifyChecksum(int fileId);
         public string GetFilePath(string fileName);

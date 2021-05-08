@@ -55,20 +55,6 @@ namespace CQuerMVC.Controllers
 
             return RedirectToAction("Index");
         }
-        public IActionResult Finalize(int id)
-        {
-            return View(new IdViewModel(id));
-        }
-        [HttpPost]
-        [EnumAuthorizeRole(AccountType.Administrator)]
-        public async Task<IActionResult> Finalize(IdViewModel idViewModel)
-        {
-            var result = await _ticketClientService.FinalizeTicket(idViewModel.Id);
-            if (!result.IsSuccessful)
-                return RedirectToAction("Error");
-
-            return RedirectToAction("Index");
-        }
         public IActionResult Delete(int id)
         {
             return View(new IdViewModel(id));
