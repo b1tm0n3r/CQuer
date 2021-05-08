@@ -31,19 +31,23 @@ namespace CommonServices.FileManager
             _mapper = mapper;
             BASE_FILESTORE_PATH = filestorePath;
         }
-        public async Task<int> DownloadFileFromSource(string source)
+        public async Task<int> DownloadFileFromSource(DownloadReferenceDto downloadReferenceDto)
         {
-            string fileName = source.Split("/").Last();
+            string fileName = downloadReferenceDto.DownloadUrl.Split("/").Last();
             string filePath = BASE_FILESTORE_PATH + Path.DirectorySeparatorChar + fileName;
-            _httpWebClientProxy.DownloadFileFromUrl(source, filePath);
-            await _dbContext.FileReferences.AddAsync(new FileReference()
+            _httpWebClientProxy.DownloadFileFromUrl(downloadReferenceDto.DownloadUrl, filePath);
+            var result = await _dbContext.FileReferences.AddAsync(new FileReference()
             {
+                TicketId = downloadReferenceDto.TicketId,
                 FileName = fileName,
                 Path = filePath,
-                SHA256Hash = ComputeFileSHA256Checksum(filePath),
-                UploadDate = DateTime.Now
+                Sha256Checksum = ComputeFileSHA256Checksum(filePath),
+                UploadDate = DateTime.Now,
+                ChecksumMatchWithDeclared = false,
+                ChecksumMatchWithRemote = false
             });
-            return await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
+            return result.Entity.Id;
         }
 
         public async Task<int> RemoveFile(int id)
@@ -60,6 +64,40 @@ namespace CommonServices.FileManager
             var fileReferenceDtos = _mapper.Map<IEnumerable<FileReferenceDto>>(fileReferences);
 
             return fileReferenceDtos;
+        }
+
+        public async Task<bool> VerifyChecksum(int fileId)
+        {
+            var processedFileReference = _dbContext.FileReferences.FirstOrDefault(x => x.Id == fileId);
+            var processedTicket = _dbContext.Tickets.FirstOrDefault(x => x.Id == processedFileReference.TicketId);
+
+            var directDownloadUrl = processedTicket.DownloadUrl;
+
+            if (processedTicket.Sha256Checksum != null)
+                processedFileReference.ChecksumMatchWithDeclared = processedFileReference.Sha256Checksum.Equals(processedTicket.Sha256Checksum);
+
+            TryValidateAgainstRemoteChecksum(processedFileReference, directDownloadUrl);
+            var recordChanged = processedFileReference.ChecksumMatchWithDeclared || processedFileReference.ChecksumMatchWithRemote;
+
+            if (recordChanged)
+                await _dbContext.SaveChangesAsync();
+            
+            return recordChanged;
+        }
+
+        private void TryValidateAgainstRemoteChecksum(FileReference processedFileReference, string directDownloadUrl)
+        {
+            var baseDownloadPageUrl = directDownloadUrl.Substring(0, directDownloadUrl.LastIndexOf("/") + 1);
+            string sha256Checksum;
+            if (_httpWebClientProxy.TryDownloadSha256ChecksumFromFile(directDownloadUrl + ".sha256", out sha256Checksum) ||
+                _httpWebClientProxy.TryDownloadSha256ChecksumFromFile(directDownloadUrl + ".sha256sum", out sha256Checksum))
+            {
+                processedFileReference.ChecksumMatchWithRemote = processedFileReference.Sha256Checksum.Equals(sha256Checksum);
+            }
+            else if (_httpWebClientProxy.TryExtractSha256ChecksumFromPage(baseDownloadPageUrl, directDownloadUrl, out sha256Checksum))
+            {
+                processedFileReference.ChecksumMatchWithRemote = processedFileReference.Sha256Checksum.Equals(sha256Checksum);
+            }
         }
 
         public byte[] GetFileByName(string fileName)

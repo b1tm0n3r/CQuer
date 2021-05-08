@@ -29,7 +29,7 @@ namespace CommonServices.DatabaseOperator
         }
         protected string GetFileChecksum(string fileName)
         {
-            return dbContext.FileReferences.FirstOrDefault(x => x.FileName == fileName).SHA256Hash;
+            return dbContext.FileReferences.FirstOrDefault(x => x.FileName == fileName).Sha256Checksum;
         }
     }
 }

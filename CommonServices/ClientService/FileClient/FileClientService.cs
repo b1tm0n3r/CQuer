@@ -23,7 +23,7 @@ namespace CommonServices.ClientService.FileClient
             var response = await _restClient.ExecuteAsync(request);
             return response;
         }
-
+        
         public async Task<IEnumerable<FileReferenceDto>> GetFileReferences()
         {
             var request = new RestRequest(string.Empty, Method.GET);
@@ -34,6 +34,13 @@ namespace CommonServices.ClientService.FileClient
         public async Task<IRestResponse> RemoveFile(int id)
         {
             var request = new RestRequest(id.ToString(), Method.DELETE);
+            var response = await _restClient.ExecuteAsync(request);
+            return response;
+        }
+
+        public async Task<IRestResponse> ValidateFileChecksum(int id)
+        {
+            var request = new RestRequest(id.ToString() + "/validate", Method.PUT);
             var response = await _restClient.ExecuteAsync(request);
             return response;
         }

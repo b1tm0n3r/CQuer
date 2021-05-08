@@ -24,7 +24,7 @@ namespace CommonServices.HttpWebProxy
             webClient.DownloadFile(sourceUrl, destinationPath);
         }
 
-        public bool TryDownloadSHA256ChecksumFromFile(string sourceUrl, out string sha256Checksum)
+        public bool TryDownloadSha256ChecksumFromFile(string sourceUrl, out string sha256Checksum)
         {
             HttpWebRequest request = WebRequest.CreateHttp(sourceUrl);
             var response = (HttpWebResponse)request.GetResponse();
@@ -37,11 +37,27 @@ namespace CommonServices.HttpWebProxy
             {
                 using var streamReader = new StreamReader(response.GetResponseStream());
                 var responseText = streamReader.ReadToEnd();
-                //In case if sha256 file contant is in format <hash> <filename>
-                sha256Checksum = responseText.Split(" ")[0];
+
+                sha256Checksum = HtmlParser.GetSha256ChecksumFromString(responseText);
+
                 return true;
             }
         }
 
+        public bool TryExtractSha256ChecksumFromPage(string sourceUrl, string directDownloadUrl, out string sha256Checksum)
+        {
+            SimpleWebScraper simpleWebScraper = new SimpleWebScraper();
+            var baseDownloadPage = simpleWebScraper.GetWebsiteDocument(sourceUrl);
+            if(simpleWebScraper.TryGetSha256FromHtml(baseDownloadPage, directDownloadUrl, out string result))
+            {
+                sha256Checksum = result;
+                return true;
+            }
+            else
+            {
+                sha256Checksum = string.Empty;
+                return false;
+            }
+        }
     }
 }

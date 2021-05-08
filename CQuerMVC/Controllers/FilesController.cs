@@ -23,7 +23,6 @@ namespace CQuerMVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //TODO: add client implementation
             var fileReferences = await _fileClientService.GetFileReferences();
             var viewModel = new FilesViewModel()
             {
@@ -32,14 +31,14 @@ namespace CQuerMVC.Controllers
             return View(viewModel);
         }
         [HttpPost]
-        public async Task<IActionResult> Resolver(FileReferenceViewModel fileReferenceViewModel)
+        public async Task<IActionResult> Resolver(DownloadReferenceDto downloadReferenceDto)
         {
-            var ticketReference = await _ticketClientService.GetTicket(fileReferenceViewModel.TicketId);
-            if (ticketReference is null || !IsProcessedFileReferenceValid(ticketReference, fileReferenceViewModel))
+            var ticketReference = await _ticketClientService.GetTicket(downloadReferenceDto.TicketId);
+            if (ticketReference is null || !IsProcessedFileReferenceValid(ticketReference, downloadReferenceDto))
                 return RedirectToAction("Error");
 
-            var downloadReferenceDto = new DownloadReferenceDto(fileReferenceViewModel.DownloadUrl, fileReferenceViewModel.Sha256Checksum);
-            await _fileClientService.DownloadFile(downloadReferenceDto);
+            var response = await _fileClientService.DownloadFile(downloadReferenceDto);
+            await _fileClientService.ValidateFileChecksum(int.Parse(response.Content));
 
             return RedirectToAction("Index");
         }
@@ -60,11 +59,15 @@ namespace CQuerMVC.Controllers
             return View();
         }
 
-        private bool IsProcessedFileReferenceValid(TicketDto ticketDto, FileReferenceViewModel fileReferenceViewModel)
+        private bool IsProcessedFileReferenceValid(TicketDto ticketDto, DownloadReferenceDto downloadReferenceDto)
         {
-            return ticketDto.Id.Equals(fileReferenceViewModel.TicketId) &&
-                ticketDto.Sha256Checksum.Equals(fileReferenceViewModel.Sha256Checksum) &&
-                ticketDto.DownloadUrl.Equals(fileReferenceViewModel.DownloadUrl);
+            if(ticketDto.Sha256Checksum is not null)
+                return ticketDto.Id.Equals(downloadReferenceDto.TicketId) &&
+                    ticketDto.Sha256Checksum.Equals(downloadReferenceDto.Sha256Checksum) &&
+                    ticketDto.DownloadUrl.Equals(downloadReferenceDto.DownloadUrl);
+
+            return ticketDto.Id.Equals(downloadReferenceDto.TicketId) &&
+                    ticketDto.DownloadUrl.Equals(downloadReferenceDto.DownloadUrl);
         }
     }
 }

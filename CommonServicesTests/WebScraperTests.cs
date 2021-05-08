@@ -23,7 +23,7 @@ namespace CommonServicesTests
         [TestMethod]
         public void CAN_RESOLVE_INLINE_SHA256_CHECKSUM()
         {
-            SimpleWebScraper objectUnderTest = new SimpleWebScraper(string.Empty);
+            SimpleWebScraper objectUnderTest = new SimpleWebScraper();
             HtmlDocument htmlDocument = new HtmlDocument();
             htmlDocument.Load(CommonMethods.GetFilePathFromTestResources(DOCUMENT_WITH_INLINE_CHECKSUMS));
 
@@ -38,7 +38,7 @@ namespace CommonServicesTests
         [TestMethod]
         public void CAN_RESOLVE_INLINE_SHA256_CHECKSUM_FROM_TABLE()
         {
-            SimpleWebScraper objectUnderTest = new SimpleWebScraper(string.Empty);
+            SimpleWebScraper objectUnderTest = new SimpleWebScraper();
             HtmlDocument htmlDocument = new HtmlDocument();
             htmlDocument.Load(CommonMethods.GetFilePathFromTestResources(DOCUMENT_WITH_INLINE_CHECKSUMS));
 
@@ -53,7 +53,7 @@ namespace CommonServicesTests
         [TestMethod]
         public void CAN_RESOLVE_SECOND_INLINE_SHA256_CHECKSUM_FROM_TABLE()
         {
-            SimpleWebScraper objectUnderTest = new SimpleWebScraper(string.Empty);
+            SimpleWebScraper objectUnderTest = new SimpleWebScraper();
             HtmlDocument htmlDocument = new HtmlDocument();
             htmlDocument.Load(CommonMethods.GetFilePathFromTestResources(DOCUMENT_WITH_INLINE_CHECKSUMS));
 
@@ -68,7 +68,7 @@ namespace CommonServicesTests
         [TestMethod]
         public void CAN_RESOLVE_INLINE_SHA256_CHECKSUM_IN_ADDITIONAL_TAG_FROM_TABLE()
         {
-            SimpleWebScraper objectUnderTest = new SimpleWebScraper(string.Empty);
+            SimpleWebScraper objectUnderTest = new SimpleWebScraper();
             HtmlDocument htmlDocument = new HtmlDocument();
             htmlDocument.Load(CommonMethods.GetFilePathFromTestResources(DOCUMENT_WITH_INLINE_CHECKSUMS));
 
@@ -83,7 +83,7 @@ namespace CommonServicesTests
         [TestMethod]
         public void RETURN_FALSE_IF_DOCUMENT_WITH_NO_CHECKSUMS()
         {
-            SimpleWebScraper objectUnderTest = new SimpleWebScraper(string.Empty);
+            SimpleWebScraper objectUnderTest = new SimpleWebScraper();
             HtmlDocument htmlDocument = new HtmlDocument();
             htmlDocument.Load(CommonMethods.GetFilePathFromTestResources(DOCUMENT_WITHOUT_CHECKSUMS));
 

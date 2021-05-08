@@ -8,6 +8,7 @@ namespace CommonServices.HttpWebProxy
 {
     public class HtmlParser
     {
+        private static readonly int SHA256_HEX_LENGTH = 64;
         private static readonly string HTML_TABLE_ROW_TAG = "tr";
         private static readonly string HTML_TABLE_DATA_TAG = "td";
         private static readonly string HTML_TABLE_HEADER_TAG = "th";
@@ -121,6 +122,15 @@ namespace CommonServices.HttpWebProxy
 
             var indexOfHeaderCell = tableHeaderCells.IndexOf(tableHeaderCell);
             return dataRowCells[indexOfHeaderCell].InnerText.Trim().ToUpper();
+        }
+
+        public static string GetSha256ChecksumFromString(string stringToProcess)
+        {
+            var nodeTextBlocks = stringToProcess.Split(' ', ':');
+            foreach (var textBlock in nodeTextBlocks)
+                if (textBlock.Trim().Length == SHA256_HEX_LENGTH)
+                    return textBlock.ToUpper();
+            return string.Empty;
         }
     }
 }

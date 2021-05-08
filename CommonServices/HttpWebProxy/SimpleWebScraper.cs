@@ -7,27 +7,25 @@ namespace CommonServices.HttpWebProxy
     {
         private static readonly string SHA256 = "SHA256";
         private static readonly int SHA256_HEX_LENGTH = 64;
-        private readonly string baseUrl;
         private readonly HtmlParser _htmlParser;
-        public SimpleWebScraper(string baseUrl)
+        public SimpleWebScraper()
         {
-            this.baseUrl = baseUrl;
             _htmlParser = new HtmlParser();
         }
 
-        public HtmlDocument GetWebsiteContent()
+        public HtmlDocument GetWebsiteDocument(string url)
         {
             HtmlWeb htmlWeb = new HtmlWeb();
-            return htmlWeb.Load(baseUrl);
+            return htmlWeb.Load(url);
         }
 
-        public bool TryGetSha256FromHtml(HtmlDocument htmlDocument, string directDownloadUrl, out string sha256Checksum)
+        public bool TryGetSha256FromHtml(HtmlDocument htmlDocumentWithDownloadUrl, string directDownloadUrl, out string sha256Checksum)
         {
             if (directDownloadUrl.Equals(string.Empty))
                 throw new Exception("Empty download URL parameter!");
 
             sha256Checksum = string.Empty;
-            var nodesWithHyperlinks = _htmlParser.GetAllNodesWithHyperlinks(htmlDocument);
+            var nodesWithHyperlinks = _htmlParser.GetAllNodesWithHyperlinks(htmlDocumentWithDownloadUrl);
             if (nodesWithHyperlinks is null)
                 return false;
 
@@ -56,10 +54,7 @@ namespace CommonServices.HttpWebProxy
 
             if (textWithSha256String.Length > SHA256_HEX_LENGTH)
             {
-                var nodeTextBlocks = textWithSha256String.Split(' ', ':');
-                foreach (var textBlock in nodeTextBlocks)
-                    if (textBlock.Trim().Length == SHA256_HEX_LENGTH)
-                        result = textBlock.ToUpper();
+                result = HtmlParser.GetSha256ChecksumFromString(textWithSha256String);
             }
             return result;
         }
