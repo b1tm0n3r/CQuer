@@ -26,18 +26,21 @@
                     <td>@item.Solved</td>
                     <td>@item.DownloadUrl</td>
                     <td>@item.Sha256Checksum</td>
+                    
                     <td>
-                        <a asp-action="Update" asp-route-id="@item.Id">Edit</a>
-                        @if (User.IsInRole(AccountType.Administrator.ToString()))
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        @if (!@item.Solved)
                         {
-                            <a asp-action="Finalize" asp-route-id="@item.Id">Finalize</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                            <form asp-controller="Files" asp-action="Resolver">
-                                <input name="TicketId" type="hidden" asp-for="@item.Id" />
-                                <input name="DownloadUrl" type="hidden" asp-for="@item.DownloadUrl" />
-                                <input name="Sha256Checksum" type="hidden" asp-for="@item.Sha256Checksum" />
-                                <button>Resolve</button>
-                            </form>
+                            <a asp-action="Update" asp-route-id="@item.Id">Edit</a>
+                            @if (User.IsInRole(AccountType.Administrator.ToString()))
+                            {
+                                <form asp-controller="Files" asp-action="Resolver">
+                                    <input name="TicketId" type="hidden" asp-for="@item.Id" />
+                                    <input name="DownloadUrl" type="hidden" asp-for="@item.DownloadUrl" />
+                                    <input name="Sha256Checksum" type="hidden" asp-for="@item.Sha256Checksum" />
+                                    <button>Resolve</button>
+                                </form>
+                            }
                         }
                     </td>
                 </tr>

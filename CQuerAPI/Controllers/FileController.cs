@@ -38,7 +38,7 @@ namespace CQuerAPI.Controllers
             if (!ModelState.IsValid)
                 BadRequest(ModelState);
 
-            await _fileManagerService.RemoveFile(id);
+            await _fileManagerService.RemoveFileWithReference(id);
             return Ok();
         }
 

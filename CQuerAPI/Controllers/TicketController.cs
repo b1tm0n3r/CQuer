@@ -1,4 +1,5 @@
 ﻿using Common.DTOs;
+using CommonServices.FileManager;
 using CommonServices.TicketServices;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,9 +12,11 @@ namespace CQuerAPI.Controllers
     public class TicketController : BaseController
     {
         private readonly ITicketService _ticketService;
-        public TicketController(ITicketService ticketService)
+        private readonly IFileManagerService _fileManagerService;
+        public TicketController(ITicketService ticketService, IFileManagerService fileManagerService)
         {
             _ticketService = ticketService;
+            _fileManagerService = fileManagerService;
         }
 
         [HttpGet]
@@ -71,6 +74,7 @@ namespace CQuerAPI.Controllers
             if (!ModelState.IsValid)
                 BadRequest(ModelState);
 
+            await _fileManagerService.RemoveAssociatedFilesWithReferences(id);
             var deleteStatus = await _ticketService.Delete(id);
             if (!deleteStatus)
                 return NotFound();

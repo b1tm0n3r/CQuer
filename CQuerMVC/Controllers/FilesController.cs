@@ -1,6 +1,8 @@
-﻿using Common.DTOs;
+﻿using Common.DataModels.IdentityManagement;
+using Common.DTOs;
 using CommonServices.ClientService.FileClient;
 using CommonServices.ClientService.TicketClient;
+using CQuerMVC.Helpers;
 using CQuerMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -31,6 +33,7 @@ namespace CQuerMVC.Controllers
             return View(viewModel);
         }
         [HttpPost]
+        [EnumAuthorizeRole(AccountType.Administrator)]
         public async Task<IActionResult> Resolver(DownloadReferenceDto downloadReferenceDto)
         {
             var ticketReference = await _ticketClientService.GetTicket(downloadReferenceDto.TicketId);
@@ -38,6 +41,9 @@ namespace CQuerMVC.Controllers
                 return RedirectToAction("Error");
 
             var response = await _fileClientService.DownloadFile(downloadReferenceDto);
+            
+            await _ticketClientService.FinalizeTicket(downloadReferenceDto.TicketId);
+
             await _fileClientService.ValidateFileChecksum(int.Parse(response.Content));
 
             return RedirectToAction("Index");

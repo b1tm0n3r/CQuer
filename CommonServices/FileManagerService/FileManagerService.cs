@@ -50,11 +50,19 @@ namespace CommonServices.FileManager
             return result.Entity.Id;
         }
 
-        public async Task<int> RemoveFile(int id)
+        public async Task<int> RemoveFileWithReference(int id)
         {
             var fileReference = _dbContext.FileReferences.FirstOrDefault(x => x.Id == id);
             RemoveFile(fileReference.Path);
             _dbContext.FileReferences.Remove(fileReference);
+            return await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> RemoveAssociatedFilesWithReferences(int ticketId)
+        {
+            var fileReferences = _dbContext.FileReferences.Where(x => x.TicketId == ticketId).ToList();
+            fileReferences.ForEach(file => RemoveFile(file.Path));
+            _dbContext.FileReferences.RemoveRange(fileReferences);
             return await _dbContext.SaveChangesAsync();
         }
 
