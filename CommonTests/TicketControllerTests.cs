@@ -1,5 +1,6 @@
 ﻿using Common.DataModels.StandardEntities;
 using Common.DTOs;
+using CommonServices.FileManager;
 using CommonServices.TicketServices;
 using CQuerAPI.Controllers;
 using Microsoft.AspNetCore.Mvc;
@@ -28,10 +29,11 @@ namespace CommonTests
                 Sha256Checksum = "testtest123",
                 Solved = false
             };
-            var serviceMock = new Mock<ITicketService>();
-            serviceMock.Setup(x => x.Create(testData)).Returns(Task.FromResult(1));
+            var ticketServiceMock = new Mock<ITicketService>();
+            var fileManagerServiceMock = new Mock<IFileManagerService>();
+            ticketServiceMock.Setup(x => x.Create(testData)).Returns(Task.FromResult(1));
 
-            var objectUnderTest = new TicketController(serviceMock.Object);
+            var objectUnderTest = new TicketController(ticketServiceMock.Object, fileManagerServiceMock.Object);
 
             var result = objectUnderTest.Create(testData).Result;
             Assert.IsInstanceOfType(result, typeof(CreatedResult));
@@ -50,11 +52,11 @@ namespace CommonTests
                 Sha256Checksum = "testtest123",
                 Solved = false
             };
-            var serviceMock = new Mock<ITicketService>();
-            
-            serviceMock.Setup(x => x.Update(It.IsAny<int>(), testData)).Returns(Task.FromResult(true));
+            var ticketServiceMock = new Mock<ITicketService>();
+            var fileManagerServiceMock = new Mock<IFileManagerService>();
+            ticketServiceMock.Setup(x => x.Update(It.IsAny<int>(), testData)).Returns(Task.FromResult(true));
 
-            var objectUnderTest = new TicketController(serviceMock.Object);
+            var objectUnderTest = new TicketController(ticketServiceMock.Object, fileManagerServiceMock.Object);
 
             var result = objectUnderTest.Update(1, testData).Result;
             
@@ -74,11 +76,11 @@ namespace CommonTests
                 Sha256Checksum = "testtest123",
                 Solved = false
             };
-            var serviceMock = new Mock<ITicketService>();
+            var ticketServiceMock = new Mock<ITicketService>();
+            var fileManagerServiceMock = new Mock<IFileManagerService>();
+            ticketServiceMock.Setup(x => x.Update(It.IsAny<int>(), testData)).Returns(Task.FromResult(false));
 
-            serviceMock.Setup(x => x.Update(It.IsAny<int>(), testData)).Returns(Task.FromResult(false));
-
-            var objectUnderTest = new TicketController(serviceMock.Object);
+            var objectUnderTest = new TicketController(ticketServiceMock.Object, fileManagerServiceMock.Object);
 
             var result = objectUnderTest.Update(1, testData).Result;
 
@@ -98,11 +100,11 @@ namespace CommonTests
                 Sha256Checksum = "testtest123",
                 Solved = false
             };
-            var serviceMock = new Mock<ITicketService>();
+            var ticketServiceMock = new Mock<ITicketService>();
+            var fileManagerServiceMock = new Mock<IFileManagerService>();
+            ticketServiceMock.Setup(x => x.Finalize(It.IsAny<int>())).Returns(Task.FromResult(true));
 
-            serviceMock.Setup(x => x.Finalize(It.IsAny<int>())).Returns(Task.FromResult(true));
-
-            var objectUnderTest = new TicketController(serviceMock.Object);
+            var objectUnderTest = new TicketController(ticketServiceMock.Object, fileManagerServiceMock.Object);
 
             var result = objectUnderTest.Finalize(1).Result;
 
@@ -121,11 +123,11 @@ namespace CommonTests
                 Sha256Checksum = "testtest123",
                 Solved = false
             };
-            var serviceMock = new Mock<ITicketService>();
+            var ticketServiceMock = new Mock<ITicketService>();
+            var fileManagerServiceMock = new Mock<IFileManagerService>();
+            ticketServiceMock.Setup(x => x.Finalize(It.IsAny<int>())).Returns(Task.FromResult(false));
 
-            serviceMock.Setup(x => x.Finalize(It.IsAny<int>())).Returns(Task.FromResult(false));
-
-            var objectUnderTest = new TicketController(serviceMock.Object);
+            var objectUnderTest = new TicketController(ticketServiceMock.Object, fileManagerServiceMock.Object);
 
             var result = objectUnderTest.Finalize(1).Result;
 
@@ -145,11 +147,11 @@ namespace CommonTests
                 Sha256Checksum = "testtest123",
                 Solved = false
             };
-            var serviceMock = new Mock<ITicketService>();
+            var ticketServiceMock = new Mock<ITicketService>();
+            var fileManagerServiceMock = new Mock<IFileManagerService>();
+            ticketServiceMock.Setup(x => x.Delete(It.IsAny<int>())).Returns(Task.FromResult(true));
 
-            serviceMock.Setup(x => x.Delete(It.IsAny<int>())).Returns(Task.FromResult(true));
-
-            var objectUnderTest = new TicketController(serviceMock.Object);
+            var objectUnderTest = new TicketController(ticketServiceMock.Object, fileManagerServiceMock.Object);
 
             var result = objectUnderTest.Delete(1).Result;
 
@@ -169,11 +171,11 @@ namespace CommonTests
                 Sha256Checksum = "testtest123",
                 Solved = false
             };
-            var serviceMock = new Mock<ITicketService>();
+            var ticketServiceMock = new Mock<ITicketService>();
+            var fileManagerServiceMock = new Mock<IFileManagerService>();
+            ticketServiceMock.Setup(x => x.Delete(It.IsAny<int>())).Returns(Task.FromResult(false));
 
-            serviceMock.Setup(x => x.Delete(It.IsAny<int>())).Returns(Task.FromResult(false));
-
-            var objectUnderTest = new TicketController(serviceMock.Object);
+            var objectUnderTest = new TicketController(ticketServiceMock.Object, fileManagerServiceMock.Object);
 
             var result = objectUnderTest.Delete(1).Result;
 
