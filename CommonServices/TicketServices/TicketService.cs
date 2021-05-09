@@ -32,7 +32,7 @@ namespace CommonServices.TicketServices
                 Description = ticketDto.Description,
                 DownloadUrl = ticketDto.DownloadUrl,
                 Severity = ticketDto.Severity,
-                Sha256Checksum = ticketDto.Sha256Checksum,
+                Sha256Checksum = ticketDto.Sha256Checksum.ToUpper(),
                 Solved = false
             };
 

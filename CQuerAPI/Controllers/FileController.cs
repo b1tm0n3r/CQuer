@@ -23,13 +23,22 @@ namespace CQuerAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> DownloadFile(DownloadReferenceDto downloadReferenceDto)
+        public async Task<ActionResult<int>> DownloadFileFromRemote(DownloadReferenceDto downloadReferenceDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var fileReferenceId = await _fileManagerService.DownloadFileFromSource(downloadReferenceDto);
             return Ok(fileReferenceId);
+        }
+        [HttpGet("{id}")]
+        public ActionResult ShareFile(int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var fileBytes = _fileManagerService.GetFileByReferenceId(id);
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet);
         }
 
         [HttpDelete("{id}")]

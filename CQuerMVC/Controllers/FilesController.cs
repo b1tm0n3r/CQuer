@@ -40,13 +40,18 @@ namespace CQuerMVC.Controllers
             if (ticketReference is null || !IsProcessedFileReferenceValid(ticketReference, downloadReferenceDto))
                 return RedirectToAction("Error");
 
-            var response = await _fileClientService.DownloadFile(downloadReferenceDto);
+            var response = await _fileClientService.DownloadFileFromRemote(downloadReferenceDto);
             
             await _ticketClientService.FinalizeTicket(downloadReferenceDto.TicketId);
 
             await _fileClientService.ValidateFileChecksum(int.Parse(response.Content));
 
             return RedirectToAction("Index");
+        }
+
+        public IActionResult Download(int id, string fileName)
+        {
+            return File(_fileClientService.DownloadFileFromLocal(id).RawBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
 
         public IActionResult Delete(int id)

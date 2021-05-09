@@ -13,10 +13,7 @@
         <td>Upload Date</td>
         <td>Checksum from ticket matches</td>
         <td>Checksum from remote matches</td>
-        @if (User.IsInRole(AccountType.Administrator.ToString()))
-        {
-            <td>Actions</td>
-        }
+        <td>Actions</td>
     </tr>
     @foreach (var item in Model.Files)
     {
@@ -26,12 +23,17 @@
             <td>@item.UploadDate</td>
             <td>@item.ChecksumMatchWithDeclared.ToYesNoString()</td>
             <td>@item.ChecksumMatchWithRemote.ToYesNoString()</td>
-            @if (User.IsInRole(AccountType.Administrator.ToString()))
-            {
-                <td>
+            <td>
+                <form asp-controller="Files" asp-action="Download">
+                    <input name="id" type="hidden" asp-for="@item.Id" />
+                    <input name="fileName" type="hidden" asp-for="@item.FileName" />
+                    <button>Download</button>
+                </form>
+                @if (User.IsInRole(AccountType.Administrator.ToString()))
+                {
                     <a asp-action="Delete" asp-route-id="@item.Id">Remove</a>
-                </td>
-            }
+                }
+            </td>
         </tr>
     }
 </table>

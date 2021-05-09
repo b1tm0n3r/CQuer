@@ -16,12 +16,17 @@ namespace CommonServices.ClientService.FileClient
             _restClient.BaseUrl = new Uri(_restClient.BaseUrl + FILE_API_PATH);
         }
 
-        public async Task<IRestResponse> DownloadFile(DownloadReferenceDto downloadReferenceDto)
+        public async Task<IRestResponse> DownloadFileFromRemote(DownloadReferenceDto downloadReferenceDto)
         {
             var request = new RestRequest(string.Empty, Method.POST);
             request.AddJsonBody(downloadReferenceDto);
             var response = await _restClient.ExecuteAsync(request);
             return response;
+        }
+        public IRestResponse DownloadFileFromLocal(int fileId)
+        {
+            var request = new RestRequest(fileId.ToString(), Method.GET);
+            return _restClient.ExecuteDynamic(request);
         }
         
         public async Task<IEnumerable<FileReferenceDto>> GetFileReferences()

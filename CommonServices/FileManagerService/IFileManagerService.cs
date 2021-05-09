@@ -14,8 +14,7 @@ namespace CommonServices.FileManager
         public Task<int> RemoveAssociatedFilesWithReferences(int ticketId);
         public IEnumerable<FileReferenceDto> GetFileReferences();
         public Task<bool> VerifyChecksum(int fileId);
-        public string GetFilePath(string fileName);
-        public byte[] GetFileByName(string filePath);
+        public byte[] GetFileByReferenceId(int referenceId);
         public string ComputeFileSHA256Checksum(string filePath);
     }
 }
