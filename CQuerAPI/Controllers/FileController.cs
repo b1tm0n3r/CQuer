@@ -32,11 +32,8 @@ namespace CQuerAPI.Controllers
             return Ok(fileReferenceId);
         }
         [HttpGet("{id}")]
-        public ActionResult ShareFile(int id)
+        public FileStreamResult ShareFile(int id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var fileBytes = _fileManagerService.GetFileByReferenceId(id);
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet);
         }

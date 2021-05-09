@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,10 +25,12 @@ namespace CommonServices.ClientService.FileClient
             var response = await _restClient.ExecuteAsync(request);
             return response;
         }
-        public IRestResponse DownloadFileFromLocal(int fileId)
+        public async Task<Stream> DownloadFileFromLocal(int fileId)
         {
-            var request = new RestRequest(fileId.ToString(), Method.GET);
-            return _restClient.ExecuteDynamic(request);
+            var client = new HttpClient();
+            var message = new HttpRequestMessage(HttpMethod.Get, _restClient.BaseUrl + fileId.ToString());
+            var response = await client.SendAsync(message, HttpCompletionOption.ResponseHeadersRead);
+            return await response.Content.ReadAsStreamAsync();
         }
         
         public async Task<IEnumerable<FileReferenceDto>> GetFileReferences()

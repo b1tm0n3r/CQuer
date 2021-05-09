@@ -107,14 +107,10 @@ namespace CommonServices.FileManager
                 processedFileReference.ChecksumMatchWithRemote = processedFileReference.Sha256Checksum.Equals(sha256Checksum);
             }
         }
-        public byte[] GetFileByReferenceId(int referenceId)
+        public FileStream GetFileByReferenceId(int referenceId)
         {
             var filePath = _dbContext.FileReferences.FirstOrDefault(x => x.Id == referenceId).Path;
-            return GetFile(filePath);
-        }
-        private byte[] GetFile(string filePath)
-        {
-            return File.ReadAllBytes(filePath);
+            return File.OpenRead(filePath);
         }
         private void RemoveFile(string filePath)
         {
