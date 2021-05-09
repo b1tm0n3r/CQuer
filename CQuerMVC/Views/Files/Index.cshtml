@@ -1,5 +1,6 @@
 ﻿@model FilesViewModel
 @using Common.DataModels.IdentityManagement
+@using CQuerMVC.Helpers;
 
 @{
     ViewData["Title"] = "Home Page";
@@ -10,6 +11,8 @@
         <td>File Name</td>
         <td>Checksum</td>
         <td>Upload Date</td>
+        <td>Checksum from ticket matches</td>
+        <td>Checksum from remote matches</td>
         @if (User.IsInRole(AccountType.Administrator.ToString()))
         {
             <td>Actions</td>
@@ -21,6 +24,8 @@
             <td>@item.FileName</td>
             <td>@item.Sha256Checksum</td>
             <td>@item.UploadDate</td>
+            <td>@item.ChecksumMatchWithDeclared.ToYesNoString()</td>
+            <td>@item.ChecksumMatchWithRemote.ToYesNoString()</td>
             @if (User.IsInRole(AccountType.Administrator.ToString()))
             {
                 <td>
