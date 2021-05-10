@@ -8,7 +8,8 @@ namespace Common.MappingProfiles
     {
         public AccountMapperProfile()
         {
-            CreateMap<Account, AccountDto>();
+            CreateMap<Account, AccountDto>()
+                .ForMember(dto => dto.Username, x => x.MapFrom(x => x.Name));
         }
     }
 }
