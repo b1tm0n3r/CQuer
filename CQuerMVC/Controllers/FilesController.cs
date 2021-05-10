@@ -7,6 +7,7 @@ using CQuerMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -40,13 +41,22 @@ namespace CQuerMVC.Controllers
             if (ticketReference is null || !IsProcessedFileReferenceValid(ticketReference, downloadReferenceDto))
                 return RedirectToAction("Error");
 
-            var response = await _fileClientService.DownloadFile(downloadReferenceDto);
-            
-            await _ticketClientService.FinalizeTicket(downloadReferenceDto.TicketId);
-
-            await _fileClientService.ValidateFileChecksum(int.Parse(response.Content));
+            _ = Task.Run(() => ResolveFileReference(downloadReferenceDto));
 
             return RedirectToAction("Index");
+        }
+
+        private async Task ResolveFileReference(DownloadReferenceDto downloadReferenceDto)
+        {
+            var response = await _fileClientService.DownloadFileFromRemote(downloadReferenceDto);
+            await _ticketClientService.FinalizeTicket(downloadReferenceDto.TicketId);
+            await _fileClientService.ValidateFileChecksum(int.Parse(response.Content));
+        }
+
+        public async Task<FileResult> Download(int id, string fileName)
+        {
+            var fileStream = await _fileClientService.DownloadFileFromLocal(id);
+            return File(fileStream, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
 
         public IActionResult Delete(int id)

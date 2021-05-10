@@ -26,6 +26,10 @@ namespace CommonServices.TicketServices
         {
             var creatorId = _dbContext.Accounts.Where(x => x.Name.Equals(ticketDto.Username))
                 .FirstOrDefault().AccountId;
+
+            if (ticketDto.Sha256Checksum != null)
+                ticketDto.Sha256Checksum = ticketDto.Sha256Checksum.ToUpper();
+
             var ticket = new Ticket
             {
                 CreatorId = creatorId, 

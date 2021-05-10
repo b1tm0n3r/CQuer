@@ -1,5 +1,6 @@
 ﻿@model TicketsViewModel
 @using Common.DataModels.IdentityManagement
+@using CQuerMVC.Helpers
 
 <div class="box">
     <div class="justify-content-center align-items-center">
@@ -23,7 +24,7 @@
                     <td>@item.Username</td>
                     <td>@item.Description</td>
                     <td>@item.Severity</td>
-                    <td>@item.Solved</td>
+                    <td>@item.Solved.ToYesNoString()</td>
                     <td>@item.DownloadUrl</td>
                     <td>@item.Sha256Checksum</td>
                     
