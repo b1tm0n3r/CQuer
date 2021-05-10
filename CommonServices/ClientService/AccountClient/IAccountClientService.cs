@@ -8,5 +8,8 @@ namespace CommonServices.ClientService.AccountClient
     public interface IAccountClientService
     {
         Task<IRestResponse> LoginResponse(LoginDto loginDto);
+        Task<IRestResponse> RegisterResponse(RegisterDto loginDto);
+        Task<UserDto> GetUserDtoById(int id);
+        string GetUserLocation(IRestResponse response);
     }
 }

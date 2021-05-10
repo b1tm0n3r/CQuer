@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -20,6 +21,29 @@ namespace CommonServices.ClientService.AccountClient
             request.AddJsonBody(loginDto);
             var response = await _restClient.ExecuteAsync(request);
             return response;
+        }
+        
+        public async Task<IRestResponse> RegisterResponse(RegisterDto registerDto)
+        {
+            var request = new RestRequest("register", Method.POST);
+            request.AddJsonBody(registerDto);
+            var response = await _restClient.ExecuteAsync(request);
+            return response;
+        }
+        
+        public async Task<UserDto> GetUserDtoById(int id)
+        {
+            var request = new RestRequest($"{id}", Method.GET);
+            var response = await _restClient.ExecuteAsync(request);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<UserDto>(response.Content);
+        }
+        
+        public string GetUserLocation(IRestResponse response)
+        {
+            return response.Headers.Where(x => x.Name == "Location")
+                .Select(x => x.Value)
+                .FirstOrDefault()
+                .ToString();
         }
     }
 }
