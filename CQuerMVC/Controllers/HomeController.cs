@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -63,9 +65,28 @@ namespace CQuerMVC.Controllers
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
-        
+
         public IActionResult Register()
         {
+            return View();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterDto registerDto)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            
+            var registerResponse = _clientService.RegisterResponse(registerDto);
+            if (registerResponse.Result.IsSuccessful)
+            {
+                var location = _clientService.GetUserLocation(await registerResponse);
+                var id = new string(location.Where(Char.IsDigit).ToArray());
+                var signInUser = _clientService.GetUserDtoById(Int32.Parse(id));
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, GeneratePrincipal.GetPrincipal(signInUser.Result));
+                
+                return RedirectToAction("UserPanel", "Account");
+            }
             return View();
         }
 
