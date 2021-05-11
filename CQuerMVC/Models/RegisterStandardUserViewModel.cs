@@ -5,6 +5,6 @@ namespace CQuerMVC.Models
 {
     public class RegisterStandardUserViewModel : RegisterDto
     {
-        public AccountType AccountType { get; set; } = AccountType.StandardUser;
+        public new AccountType AccountType { get; } = AccountType.StandardUser;
     }
 }
