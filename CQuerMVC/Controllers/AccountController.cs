@@ -26,16 +26,10 @@ namespace CQuerMVC.Controllers
             _accountClientService = accountClientService;
         }
 
-        [EnumAuthorizeRole(AccountType.StandardUser)]
-        public IActionResult UserPanel()
+        [Authorize]
+        public IActionResult Index()
         {
-            return RedirectToAction("Index", "Ticket");
-        }
-        
-        [EnumAuthorizeRole(AccountType.Administrator)]
-        public IActionResult AdminPanel()
-        {
-            return RedirectToAction("Index","Ticket");  
+            return View();
         }
 
         [AllowAnonymous]
@@ -88,7 +82,7 @@ namespace CQuerMVC.Controllers
                 var signInUser = _accountClientService.GetUserDtoById(Int32.Parse(id));
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, GeneratePrincipal.GetPrincipal(signInUser.Result));
 
-                return RedirectToAction("UserPanel", "Account");
+                return RedirectToAction("Index", "Account");
             }
             return View();
         }

@@ -77,7 +77,7 @@ namespace CQuerMVC.Controllers
             return View();
         }
 
-        private bool IsProcessedFileReferenceValid(TicketDto ticketDto, DownloadReferenceDto downloadReferenceDto)
+        private static bool IsProcessedFileReferenceValid(TicketDto ticketDto, DownloadReferenceDto downloadReferenceDto)
         {
             if(ticketDto.Sha256Checksum is not null)
                 return ticketDto.Id.Equals(downloadReferenceDto.TicketId) &&
