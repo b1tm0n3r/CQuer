@@ -15,10 +15,10 @@ using System.Threading.Tasks;
 namespace CQuerMVC.Controllers
 {
     [Authorize]
-    public class TicketController : Controller
+    public class TicketsController : Controller
     {
         private readonly ITicketClientService _ticketClientService;
-        public TicketController(ITicketClientService ticketClientService)
+        public TicketsController(ITicketClientService ticketClientService)
         {
             _ticketClientService = ticketClientService;
         }
