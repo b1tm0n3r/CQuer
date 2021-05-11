@@ -4,6 +4,7 @@ using CommonServices.ClientService.TicketClient;
 using CommonServices.TicketServices;
 using CQuerMVC.Helpers;
 using CQuerMVC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using System;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace CQuerMVC.Controllers
 {
+    [Authorize]
     public class TicketController : Controller
     {
         private readonly ITicketClientService _ticketClientService;

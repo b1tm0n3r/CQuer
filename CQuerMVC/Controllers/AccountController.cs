@@ -20,10 +20,10 @@ namespace CQuerMVC.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAccountClientService _client;
-        public AccountController(IAccountClientService client)
+        private readonly IAccountClientService _accountClientService;
+        public AccountController(IAccountClientService accountClientService)
         {
-            _client = client;
+            _accountClientService = accountClientService;
         }
 
         [EnumAuthorizeRole(AccountType.StandardUser)]
@@ -37,6 +37,61 @@ namespace CQuerMVC.Controllers
         {
             return RedirectToAction("Index","Ticket");  
         }
-        
+
+        [AllowAnonymous]
+        public IActionResult Login(string returnUrl)
+        {
+            return returnUrl is null ? View() : View(new LoginViewModel() { RedirectUrl = returnUrl });
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            var response = _accountClientService.LoginResponse(loginViewModel.LoginDto);
+            if (response.Result.IsSuccessful)
+            {
+                var signInUser = Newtonsoft.Json.JsonConvert.DeserializeObject<UserDto>(response.Result.Content);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, GeneratePrincipal.GetPrincipal(signInUser));
+                return loginViewModel.RedirectUrl is null ? RedirectToAction("Index", "Home") : Redirect(loginViewModel.RedirectUrl);
+            }
+            ModelState.AddModelError(nameof(LoginDto.Password), "Invalid username or password!");
+            return View(loginViewModel);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register(RegisterStandardUserViewModel registerDto)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            var registerResponse = _accountClientService.RegisterResponse(registerDto);
+            if (registerResponse.Result.IsSuccessful)
+            {
+                var location = _accountClientService.GetUserLocation(await registerResponse);
+                var id = new string(location.Where(Char.IsDigit).ToArray());
+                var signInUser = _accountClientService.GetUserDtoById(Int32.Parse(id));
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, GeneratePrincipal.GetPrincipal(signInUser.Result));
+
+                return RedirectToAction("UserPanel", "Account");
+            }
+            return View();
+        }
+
     }
 }

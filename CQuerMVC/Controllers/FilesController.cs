@@ -4,6 +4,7 @@ using CommonServices.ClientService.FileClient;
 using CommonServices.ClientService.TicketClient;
 using CQuerMVC.Helpers;
 using CQuerMVC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace CQuerMVC.Controllers
 {
+    [Authorize]
     public class FilesController : Controller
     {
         private IFileClientService _fileClientService;
