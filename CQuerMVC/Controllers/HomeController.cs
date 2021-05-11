@@ -12,6 +12,7 @@ using CQuerMVC.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -72,7 +73,7 @@ namespace CQuerMVC.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterDto registerDto)
+        public async Task<IActionResult> Register(RegisterStandardUserViewModel registerDto)
         {
             if (!ModelState.IsValid)
                 return View();
