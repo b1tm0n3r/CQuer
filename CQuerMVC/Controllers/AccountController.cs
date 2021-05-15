@@ -86,6 +86,33 @@ namespace CQuerMVC.Controllers
             }
             return View();
         }
+        
+        [EnumAuthorizeRole(AccountType.Administrator)]
+        public IActionResult RegisterAdminPanel()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        [EnumAuthorizeRole(AccountType.Administrator)]
+        public async Task<IActionResult> RegisterAdminPanel(RegisterAdminViewModel registerDto)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            
+            var registerResponse = await _accountClientService.RegisterResponse(registerDto);
+            if (registerResponse.IsSuccessful)
+            {
+                var location = _accountClientService.GetUserLocation(registerResponse);
+                var id = new string(location.Where(Char.IsDigit).ToArray());
+                var signInUser = _accountClientService.GetUserDtoById(Int32.Parse(id));
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, GeneratePrincipal.GetPrincipal(signInUser.Result));
+                
+                return RedirectToAction("AdminPanel", "Account");
+            }
+            ModelState.AddModelError(nameof(RegisterAdminViewModel.Username), registerResponse.ErrorMessage.Trim('"'));
+
+            return View();
+        }
     }
 }
