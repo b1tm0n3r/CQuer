@@ -20,10 +20,10 @@ namespace CQuerMVC.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAccountClientService _client;
-        public AccountController(IAccountClientService client)
+        private readonly IAccountClientService _clientService;
+        public AccountController(IAccountClientService clientService)
         {
-            _client = client;
+            _clientService = clientService;
         }
 
         [EnumAuthorizeRole(AccountType.StandardUser)]
@@ -38,5 +38,32 @@ namespace CQuerMVC.Controllers
             return RedirectToAction("Index","Ticket");  
         }
         
+        [EnumAuthorizeRole(AccountType.Administrator)]
+        public IActionResult RegisterAdminPanel()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [EnumAuthorizeRole(AccountType.Administrator)]
+        public async Task<IActionResult> RegisterAdminPanel(RegisterAdminViewModel registerDto)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            
+            var registerResponse = _clientService.RegisterResponse(registerDto);
+            if (registerResponse.Result.IsSuccessful)
+            {
+                var location = _clientService.GetUserLocation(await registerResponse);
+                var id = new string(location.Where(Char.IsDigit).ToArray());
+                var signInUser = _clientService.GetUserDtoById(Int32.Parse(id));
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, GeneratePrincipal.GetPrincipal(signInUser.Result));
+                
+                return RedirectToAction("AdminPanel", "Account");
+            }
+            ModelState.AddModelError(nameof(RegisterAdminViewModel.Username), registerResponse.Result.ErrorMessage.Trim('"'));
+
+            return View();
+        }
     }
 }
