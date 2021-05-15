@@ -88,6 +88,8 @@ namespace CQuerMVC.Controllers
                 
                 return RedirectToAction("UserPanel", "Account");
             }
+            ModelState.AddModelError(nameof(RegisterStandardUserViewModel.Username), registerResponse.Result.ErrorMessage.Trim('"'));
+
             return View();
         }
 
