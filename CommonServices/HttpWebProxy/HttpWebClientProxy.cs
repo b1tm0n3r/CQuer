@@ -10,6 +10,7 @@ namespace CommonServices.HttpWebProxy
 {
     class HttpWebClientProxy : IHttpWebClientProxy
     {
+        private static readonly int CRAWLER_BASE_DEPTH = 3;
         private readonly ILogger<HttpWebClientProxy> _logger;
 
         public HttpWebClientProxy(ILogger<HttpWebClientProxy> logger)
@@ -58,6 +59,26 @@ namespace CommonServices.HttpWebProxy
                 sha256Checksum = string.Empty;
                 return false;
             }
+        }
+
+        public bool TryFindChecksumInSubpages(string sourceUrl, string directDownloadUrl, out string sha256Checksum)
+        {
+            WebCrawler webCrawler = new WebCrawler(sourceUrl);
+            SimpleWebScraper simpleWebScraper = new SimpleWebScraper();
+
+            var crawledPages = webCrawler.Crawl(CRAWLER_BASE_DEPTH);
+            sha256Checksum = null;
+
+            foreach (var page in crawledPages)
+            {
+                if (simpleWebScraper.TryGetSha256FromHtml(page, directDownloadUrl, out string result))
+                {
+                    sha256Checksum = result;
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

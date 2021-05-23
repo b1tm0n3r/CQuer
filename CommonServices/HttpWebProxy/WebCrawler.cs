@@ -20,6 +20,13 @@ namespace CommonServices.HttpWebProxy
             _htmlParser = new HtmlParser();
             baseUrl = ExtractBaseUrl(url);
         }
+        public List<HtmlDocument> Crawl(int depth)
+        {
+            List<HtmlDocument> results = new List<HtmlDocument>();
+            var urlsToCrawl = _htmlParser.GetUrlsFromHtmlDocumentLinks(Crawl(baseUrl));
+            Crawl(urlsToCrawl, depth - 1, results);
+            return results;
+        }
         public HtmlDocument Crawl(string url)
         {
             return url.StartsWith(baseUrl) ? _htmlWeb.Load(url) : null;
