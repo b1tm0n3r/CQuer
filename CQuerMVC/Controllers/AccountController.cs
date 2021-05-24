@@ -110,7 +110,7 @@ namespace CQuerMVC.Controllers
                 
                 return RedirectToAction("AdminPanel", "Account");
             }
-            ModelState.AddModelError(nameof(RegisterAdminViewModel.Username), registerResponse.ErrorMessage.Trim('"'));
+            ModelState.AddModelError(nameof(RegisterAdminViewModel.Username), registerResponse.Content.Trim('"'));
 
             return View();
         }
