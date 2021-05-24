@@ -50,10 +50,10 @@ namespace CQuerMVC.Controllers
             if (!ModelState.IsValid)
                 return View();
 
-            var response = _clientService.LoginResponse(loginDto);
-            if (response.Result.IsSuccessful)
+            var response = await _clientService.LoginResponse(loginDto);
+            if (response.IsSuccessful)
             {
-                var signInUser = Newtonsoft.Json.JsonConvert.DeserializeObject<UserDto>(response.Result.Content);
+                var signInUser = Newtonsoft.Json.JsonConvert.DeserializeObject<UserDto>(response.Content);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, GeneratePrincipal.GetPrincipal(signInUser));
                 return RedirectToAction(signInUser.AccountType==AccountType.StandardUser ? "UserPanel" : "AdminPanel", "Account");
             }
@@ -78,17 +78,17 @@ namespace CQuerMVC.Controllers
             if (!ModelState.IsValid)
                 return View();
             
-            var registerResponse = _clientService.RegisterResponse(registerDto);
-            if (registerResponse.Result.IsSuccessful)
+            var registerResponse = await _clientService.RegisterResponse(registerDto);
+            if (registerResponse.IsSuccessful)
             {
-                var location = _clientService.GetUserLocation(await registerResponse);
+                var location = _clientService.GetUserLocation(registerResponse);
                 var id = new string(location.Where(Char.IsDigit).ToArray());
                 var signInUser = _clientService.GetUserDtoById(Int32.Parse(id));
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, GeneratePrincipal.GetPrincipal(signInUser.Result));
                 
                 return RedirectToAction("UserPanel", "Account");
             }
-            ModelState.AddModelError(nameof(RegisterStandardUserViewModel.Username), registerResponse.Result.ErrorMessage.Trim('"'));
+            ModelState.AddModelError(nameof(RegisterStandardUserViewModel.Username), registerResponse.Content.Trim('"'));
 
             return View();
         }
