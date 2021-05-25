@@ -1,8 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using CommonServices;
+using Common.DataModels.IdentityManagement;
+using Common.DTOs;
+using CommonServices.AccountServices;
 using CommonServices.FileManager;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -16,6 +19,7 @@ namespace CQuerAPI
         {
             var host = CreateHostBuilder(args).Build();
             await ConfigureDatabase(host);
+            await CreateDefaulAdminAccount(host);
             await host.RunAsync();
         }
 
@@ -41,6 +45,24 @@ namespace CQuerAPI
             {
                 var logger = services.GetRequiredService<ILogger<Program>>();
                 logger.LogError("Error during db configuration: {0}", ex);
+            }
+        }
+
+        public static async Task CreateDefaulAdminAccount(IHost host)
+        {
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            var accountService = services.GetRequiredService<IAccountService>();
+            var configurationService = services.GetRequiredService<IConfiguration>();
+
+            if (!await accountService.AccountExists(configurationService.GetSection("DefaultStartUpAdminDetails").GetValue<string>("Login")))
+            {
+                await accountService.Register(new RegisterDto
+                {
+                    Username = configurationService.GetSection("DefaultStartUpAdminDetails").GetValue<string>("Login"),
+                    Password = configurationService.GetSection("DefaultStartUpAdminDetails").GetValue<string>("Password"),
+                    AccountType = AccountType.Administrator
+                });
             }
         }
     }
