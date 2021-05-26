@@ -79,6 +79,15 @@ namespace Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Admin details from appsettings.json is empty!.
+        /// </summary>
+        internal static string EmptyAdminDetails {
+            get {
+                return ResourceManager.GetString("EmptyAdminDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CQuer Local API URL from appsettings.json is empty!.
         /// </summary>
         internal static string EmptyAPI {
