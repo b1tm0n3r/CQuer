@@ -25,7 +25,7 @@ namespace CQuerAPI
         private static void ValidateConfigurationSettings(IConfiguration configuration)
         {
             AppSettingsValidator validatorHelper = new AppSettingsValidator(configuration, new ValidatorHelper());
-            if(!validatorHelper.IsConnectionStringValid() || !validatorHelper.IsFileStorePathValid() || !validatorHelper.IsLocalApiUrlValid())
+            if(!validatorHelper.IsConnectionStringValid() || !validatorHelper.IsFileStorePathValid() || !validatorHelper.IsLocalApiUrlValid() || !validatorHelper.IsDefaultAdminDetailsValid())
                 throw new ConfigurationValidationException(validatorHelper.ErrorMessageContainer);
         }
 

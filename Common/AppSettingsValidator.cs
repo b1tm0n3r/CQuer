@@ -80,5 +80,19 @@ namespace Common
 
             return true;
         }
+        
+        public bool IsDefaultAdminDetailsValid()
+        {
+            var login = _configuration.GetSection("DefaultStartUpAdminDetails").GetValue<string>("Login");
+            var password = _configuration.GetSection("DefaultStartUpAdminDetails").GetValue<string>("Password");
+
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
+            {
+                ErrorMessageContainer = Resources.ConfigValidatorErrorMessages.EmptyAdminDetails;
+                return false;
+            }
+            
+            return true;
+        }
     }
 }
