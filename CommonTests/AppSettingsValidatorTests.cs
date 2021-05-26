@@ -131,5 +131,31 @@ namespace CommonTests
             Assert.IsNotNull(result);
             Assert.IsFalse(result);
         }
+        
+        [TestMethod]
+        public void RETURN_FALSE_IF_DEFAULT_ADMIN_DETAILS_IS_EMPTY()
+        {
+            var configuration = CommonMethods.CreateMockConfigurationFromFile(APPSETTINGS_WITH_EMPTY_ENTITIES);
+            
+            var validatorHelperMock = new Mock<IValidatorHelper>();
+            var objectUnderTest = new AppSettingsValidator(configuration, validatorHelperMock.Object);
+            var result = objectUnderTest.IsDefaultAdminDetailsValid();
+
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void RETURN_TRUE_IF_DEFAULT_ADMIN_DETAILS_IS_VALID()
+        {
+            var configuration = CommonMethods.CreateMockConfigurationFromFile(APPSETTINGS_WITH_VALID_DATA);
+            
+            var validatorHelperMock = new Mock<IValidatorHelper>();
+            var objectUnderTest = new AppSettingsValidator(configuration, validatorHelperMock.Object);
+            var result = objectUnderTest.IsDefaultAdminDetailsValid();
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result);
+        }
     }
 }
