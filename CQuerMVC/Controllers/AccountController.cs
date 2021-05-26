@@ -103,12 +103,8 @@ namespace CQuerMVC.Controllers
             var registerResponse = await _accountClientService.RegisterResponse(registerDto);
             if (registerResponse.IsSuccessful)
             {
-                var location = _accountClientService.GetUserLocation(registerResponse);
-                var id = new string(location.Where(Char.IsDigit).ToArray());
-                var signInUser = _accountClientService.GetUserDtoById(Int32.Parse(id));
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, GeneratePrincipal.GetPrincipal(signInUser.Result));
-                
-                return RedirectToAction("AdminPanel", "Account");
+                ViewBag.Result = "Account created successfully!";
+                return View();
             }
             ModelState.AddModelError(nameof(RegisterAdminViewModel.Username), registerResponse.Content.Trim('"'));
 

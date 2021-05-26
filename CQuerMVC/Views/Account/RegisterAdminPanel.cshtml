@@ -7,7 +7,7 @@
         <div id="login-box" class="col-md-12">
             <form asp-controller="Account" asp-action="RegisterAdminPanel" method="post" class="form">
                 <h1 class="text-center">Register Admin</h1>
-                <p class="text-secondary"> Create new account</p>
+                <p class="text-secondary"> Create new admin account</p>
                 <div class="form-group">
                     <input type="text" class="form-control" asp-for="Username" placeholder="Username" required="required">
                     <span asp-validation-for="Username" class="text-danger"></span>
@@ -21,6 +21,7 @@
                     <span asp-validation-for="RepeatedPassword" class="text-danger"></span>
                 </div>
                 <input type="submit" name="" value="Register" href="#">
+                <p class="text-success">@ViewBag.Result</p>
             </form>
         </div>
     </div>
