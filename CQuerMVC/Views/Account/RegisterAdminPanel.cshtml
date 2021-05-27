@@ -1,13 +1,13 @@
-﻿@model RegisterStandardUserViewModel
+﻿@model RegisterAdminViewModel
 @{
-    ViewData["Title"] = "Register Page";
+    ViewData["Title"] = "Home Page";
 }
 <div id="login-row" class="row justify-content-center align-items-center">
     <div id="login-column" class="col-md-6">
         <div id="login-box" class="col-md-12">
-            <form asp-controller="Account" asp-action="Register" method="post" class="form">
-                <h1 class="text-center">Register</h1>
-                <p class="text-secondary"> Create new account</p>
+            <form asp-controller="Account" asp-action="RegisterAdminPanel" method="post" class="form">
+                <h1 class="text-center">Register Admin</h1>
+                <p class="text-secondary"> Create new admin account</p>
                 <div class="form-group">
                     <input type="text" class="form-control" asp-for="Username" placeholder="Username" required="required">
                     <span asp-validation-for="Username" class="text-danger"></span>
@@ -21,9 +21,9 @@
                     <span asp-validation-for="RepeatedPassword" class="text-danger"></span>
                 </div>
                 <input type="submit" name="" value="Register" href="#">
+                <p class="text-success">@ViewBag.Result</p>
             </form>
         </div>
-        <div class="text-center mt-3"> Already have an account? <a asp-controller="Account" asp-action="Login">Log In here</a></div>
     </div>
 </div>
 

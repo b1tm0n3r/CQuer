@@ -138,4 +138,7 @@
   <data name="FSNotExists" xml:space="preserve">
     <value>FileStore path from appsettings.json points to non-existing directory!</value>
   </data>
+  <data name="EmptyAdminDetails" xml:space="preserve">
+    <value>Admin details from appsettings.json is empty!</value>
+  </data>
 </root>

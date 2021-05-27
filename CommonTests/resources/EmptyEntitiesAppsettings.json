@@ -2,5 +2,9 @@
   "ConnectionStrings": {
     "CQuerDB": ""
   },
-  "CQuerLocalAPIURL": ""
+  "CQuerLocalAPIURL": "",
+  "DefaultStartUpAdminDetails": {
+    "Login": "",
+    "Password": ""
+  }
 }
