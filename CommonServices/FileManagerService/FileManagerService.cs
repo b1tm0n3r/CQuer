@@ -107,6 +107,25 @@ namespace CommonServices.FileManager
                 processedFileReference.ChecksumMatchWithRemote = processedFileReference.Sha256Checksum.Equals(sha256Checksum);
             }
         }
+
+        public async Task<bool> ValidateChecksumWithCrawler(int fileId)
+        {
+            var processedFileReference = _dbContext.FileReferences.FirstOrDefault(x => x.Id == fileId);
+            var processedTicket = _dbContext.Tickets.FirstOrDefault(x => x.Id == processedFileReference.TicketId);
+
+            var directDownloadUrl = processedTicket.DownloadUrl;
+            var baseDownloadPageUrl = directDownloadUrl.Substring(0, directDownloadUrl.LastIndexOf("/") + 1);
+
+            if (_httpWebClientProxy.TryFindChecksumWithCrawler(baseDownloadPageUrl, directDownloadUrl, out var sha256Checksum))
+                processedFileReference.ChecksumMatchWithRemote = processedFileReference.Sha256Checksum.Equals(sha256Checksum);
+
+            var recordChanged = processedFileReference.ChecksumMatchWithRemote;
+            if(recordChanged)
+                await _dbContext.SaveChangesAsync();
+
+            return recordChanged;
+        }
+
         public FileStream GetFileByReferenceId(int referenceId)
         {
             var filePath = _dbContext.FileReferences.FirstOrDefault(x => x.Id == referenceId).Path;

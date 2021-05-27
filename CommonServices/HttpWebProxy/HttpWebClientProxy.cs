@@ -61,7 +61,7 @@ namespace CommonServices.HttpWebProxy
             }
         }
 
-        public bool TryFindChecksumInSubpages(string sourceUrl, string directDownloadUrl, out string sha256Checksum)
+        public bool TryFindChecksumWithCrawler(string sourceUrl, string directDownloadUrl, out string sha256Checksum)
         {
             WebCrawler webCrawler = new WebCrawler(sourceUrl);
             SimpleWebScraper simpleWebScraper = new SimpleWebScraper();
