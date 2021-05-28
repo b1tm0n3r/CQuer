@@ -2,51 +2,52 @@
 @using Common.DataModels.IdentityManagement
 @using CQuerMVC.Helpers
 
+@{
+    ViewData["Title"] = "Tickets";
+}
 <div class="box">
-    <div class="justify-content-center align-items-center">
-        <div class="mb-3 mt-3">
-            <a asp-action="Create" class="btn btn-primary">Create</a>
-        </div>
-
-        <table class="table table-striped table-bordered table-dark">
+    <h2>TICKETS</h2>
+    <div class="table-responsive">
+        <a asp-action="Create" class="btn btn-primary float-right m-2 bg-info">Create new ticket</a>
+        <table class="table table-striped table-bordered table-dark table-style" >
             <tr>
-                <th>CreatorId</th>
-                <th>Descrption</th>
-                <th>Severity</th>
-                <th>Solved</th>
-                <th>DownloadUrl</th>
-                <th>Sha256Checksum</th>
-                <th>Operations</th>
+                <td>Creator</td>
+                <td>Descrption</td>
+                <td>Severity</td>
+                <td>Solved</td>
+                <td>DownloadUrl</td>
+                <td>Checksum</td>
+                <td>Actions</td>
             </tr>
             @foreach (var item in Model.Tickets)
             {
-                <tr>
-                    <td>@item.Username</td>
-                    <td>@item.Description</td>
-                    <td>@item.Severity</td>
-                    <td>@item.Solved.ToYesNoString()</td>
-                    <td>@item.DownloadUrl</td>
-                    <td>@item.Sha256Checksum</td>
-                    
-                    <td>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <tr style="word-break: break-all">
+                    <td style="width: 10%">@item.Username</td>
+                    <td style="word-break: break-word; width: 30%">@item.Description</td>
+                    <td style="width: 10%">@item.Severity</td>
+                    <td style="width: 10%">@item.Solved.ToYesNoString()</td>
+                    <td style="width: 10%">@item.DownloadUrl</td>
+                    <td style="width: 15%">@item.Sha256Checksum</td>
+                    <td style="width: 15%">
+                        @if (User.IsInRole(AccountType.Administrator.ToString()))
+                        {
+                            <form asp-controller="Files" asp-action="Resolver">
+                                <input name="TicketId" type="hidden" asp-for="@item.Id" />
+                                <input name="DownloadUrl" type="hidden" asp-for="@item.DownloadUrl" />
+                                <input name="Sha256Checksum" type="hidden" asp-for="@item.Sha256Checksum" />
+                                <button class="btn-primary mt-2 bg-info mb-4">Resolve</button>
+                            </form>
+                        }
                         @if (!@item.Solved)
                         {
-                            <a asp-action="Update" asp-route-id="@item.Id">Edit</a>
-                            @if (User.IsInRole(AccountType.Administrator.ToString()))
-                            {
-                                <form asp-controller="Files" asp-action="Resolver">
-                                    <input name="TicketId" type="hidden" asp-for="@item.Id" />
-                                    <input name="DownloadUrl" type="hidden" asp-for="@item.DownloadUrl" />
-                                    <input name="Sha256Checksum" type="hidden" asp-for="@item.Sha256Checksum" />
-                                    <button>Resolve</button>
-                                </form>
-                            }
+                            <a asp-action="Update" asp-route-id="@item.Id" class="btn-secondary p-1">Edit</a>
                         }
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn-secondary p-1 bg-danger">Delete</a>
                     </td>
                 </tr>
             }
         </table>
     </div>
 </div>
+
 
