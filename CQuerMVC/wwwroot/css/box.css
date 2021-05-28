@@ -50,3 +50,12 @@
         .box input[type="submit"]:hover {
             background: #2ecc71
         }
+
+
+.table-style {
+    table-layout: auto;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+

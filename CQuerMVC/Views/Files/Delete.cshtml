@@ -1,16 +1,12 @@
 ﻿@model IdViewModel
-<div class="box">
-    <div class="justify-content-center align-items-center">
-        <div class="mb-3 mt-3">
-            Are you sure to delete this file?
 
-            <form method="post" asp-action="Delete">
-                <input type="hidden" asp-for="Id" />
-                <button> Remove File & Reference </button>
-            </form>
-        </div>
-        <form asp-action="Index">
-            <button>Back</button>
+<div class="row justify-content-center align-items-center">
+    <div class="box">
+        <h2>Are you sure to delete this file?</h2>
+        <form method="post" asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <button class="btn-primary"> Remove File & Reference </button>
+            <button asp-action="Index" class="btn btn-secondary">Back</button>
         </form>
     </div>
 </div>
