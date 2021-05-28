@@ -1,30 +1,61 @@
 ﻿
 .box {
-    margin-top: 5%;
-    padding: 20px;
     background: #191919;
-    text-align: left;
     transition: 0.25s;
     opacity: 0.65;
     border-radius: 5%;
+    color: white;
+    font-weight: 500;
+    margin-bottom: 5%;
+    padding: 5%;
+    text-align: center;
 }
-
-    .box h1 {
+    .box textarea,
+    .box input[type="text"],
+    .box input[type="password"] {
+        border: 0;
+        background: none;
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+        border: 2px solid #808080;
+        padding: 5% 5%;
+        outline: none;
         color: white;
-        text-transform: uppercase;
-        font-weight: 500;
+        border-radius: 24px;
+        transition: 0.25s
+    }
+        .box textarea:focus,
+        .box input[type="text"]:focus,
+        .box input[type="password"]:focus {
+            border-color: #2ecc71;
+            background: none;
+        }
+
+    .box input[type="submit"] {
+        border: 0;
+        background: none;
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+        border: 2px solid #2ecc71;
+        padding: 14px 40px;
+        outline: none;
+        color: white;
+        border-radius: 24px;
+        transition: 0.25s;
+        cursor: pointer;
     }
 
+        .box input[type="submit"]:hover {
+            background: #2ecc71
+        }
 
-    .box h2 {
-        color: white;
-        text-transform: uppercase;
-        font-weight: 400;
-    }
 
-    .box p {
-        color: white;
-        font-weight: 300;
-    }
+.table-style {
+    table-layout: auto;
+    width: 100%;
+    border-collapse: collapse;
+}
 
 

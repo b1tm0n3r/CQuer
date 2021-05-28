@@ -44,9 +44,10 @@ namespace CQuerMVC.Controllers
 
             return RedirectToAction("Index");
         }
-        public IActionResult Update(int id)
+        public async Task<IActionResult> Update(int id)
         {
-            return View();
+            var processedTicket = await _ticketClientService.GetTicket(id);
+            return View(processedTicket);
         }
         [HttpPost]
         public async Task<IActionResult> Update(TicketDto ticketDto)

@@ -92,6 +92,12 @@ namespace CommonServices.TicketServices
         {
             var tickets = await _dbContext.Tickets.OrderByDescending(x => x.Severity).ToListAsync();
             var ticketsDto = _mapper.Map<IEnumerable<TicketDto>>(tickets);
+            foreach(var ticketDto in ticketsDto)
+            {
+                var creatorId = tickets.FirstOrDefault(x => x.Id == ticketDto.Id).CreatorId;
+                var user = await _dbContext.Accounts.FirstOrDefaultAsync(x => x.AccountId == creatorId);
+                ticketDto.Username = user.Name;
+            }
 
             return ticketsDto;
         }

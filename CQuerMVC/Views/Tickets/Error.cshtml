@@ -1,11 +1,15 @@
 ﻿@{
     ViewData["Title"] = "Error";
 }
+<div class="row justify-content-center align-items-center">
 
-<h2>Operation Failed...</h2>
-Contact your system administrator to solve the problem. 
+    <div class="box">
+        <h2>Operation Failed...</h2>
+        Contact your system administrator to solve the problem.
 
-<br />
-<form asp-action="Index">
-    <button>Back</button>
-</form>
+        <br />
+        <form asp-action="Index">
+            <button class="btn-secondary">Back</button>
+        </form>
+    </div>
+</div>

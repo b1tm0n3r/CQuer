@@ -1,34 +1,34 @@
 ﻿@using Common.DTOs;
 @model TicketDto
 
-<div class="box">
-    <div class="justify-content-center align-items-center">
-        <div class="mb-3 mt-3">
-            <form asp-action="Create" method="post">
-                <input asp-for="Username" type="hidden" value="@User.Identity.Name" />
-                <div class="form-group">
-                    <label asp-for="Description" class="form-label"></label>
-                    <input asp-for="Description" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label asp-for="Severity" class="form-label"></label>
-                    <input asp-for="Severity" class="form-control" min="1" max="5" type="number" value="1">
-                </div>
-                <div class="form-group">
-                    <label asp-for="DownloadUrl" class="form-label"></label>
-                    <input asp-for="DownloadUrl" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label asp-for="Sha256Checksum" class="form-label"></label>
-                    <input asp-for="Sha256Checksum" class="form-control">
-                </div>
-
-                <button class="btn btn-primary">Create</button>
-            </form>
+<div class="row justify-content-center align-items-center">
+    <form asp-action="Create" method="post" class="box">
+        <h1 class="text-white">CREATE TICKET</h1>
+        <input asp-for="Username" type="hidden" value="@User.Identity.Name" />
+        <div class="form-group">
+            <label asp-for="Description" class="form-label"></label>           
+            <textarea row="4" asp-for="Description" class="form-control" type="textarea"></textarea>
         </div>
-        <form asp-action="Index">
-            <button>Back</button>
-        </form>
-    </div>
+        <div class="form-group">
+            <label asp-for="Severity" class="form-label"></label><br>
+            <input asp-for="Severity" type="radio" value="1" checked > 1
+            <input asp-for="Severity" type="radio" value="2"> 2
+            <input asp-for="Severity" type="radio" value="3"> 3
+            <input asp-for="Severity" type="radio" value="4"> 4
+            <input asp-for="Severity" type="radio" value="5"> 5
+        </div>
+        <div class="form-group">
+            <label asp-for="DownloadUrl" class="form-label"></label>
+            <input asp-for="DownloadUrl" class="form-control">
+        </div>
+        <div class="form-group">
+            <label asp-for="Sha256Checksum" class="form-label"></label>
+            <input asp-for="Sha256Checksum" class="form-control">
+        </div>
+
+        <button class="btn btn-primary">Create</button>
+        <button asp-action="Index" class="btn btn-secondary">Back</button>
+    </form>
+
 </div>
 

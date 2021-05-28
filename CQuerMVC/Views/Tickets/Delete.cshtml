@@ -1,16 +1,12 @@
 ﻿@model IdViewModel
-<div class="box">
-    <div class="justify-content-center align-items-center">
-        <div class="mb-3 mt-3">
-            Remove ticket with associated files (if any)?
 
-            <form method="post" asp-action="Delete">
-                <input type="hidden" asp-for="Id" />
-                <button> Remove </button>
-            </form>
-        </div>
-        <form asp-action="Index">
-            <button>Back</button>
+<div class="row justify-content-center align-items-center">
+    <div class="box">
+        <h2>Remove ticket with associated files (if any)?</h2>
+        <form method="post" asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <button class="btn-primary"> Remove </button>
+            <button asp-action="Index" class="btn-secondary">Back</button>
         </form>
     </div>
 </div>
