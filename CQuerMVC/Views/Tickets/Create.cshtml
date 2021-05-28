@@ -6,10 +6,8 @@
         <h1 class="text-white">CREATE TICKET</h1>
         <input asp-for="Username" type="hidden" value="@User.Identity.Name" />
         <div class="form-group">
-            <label asp-for="Description" class="form-label"></label>
-            
+            <label asp-for="Description" class="form-label"></label>           
             <textarea row="4" asp-for="Description" class="form-control" type="textarea"></textarea>
-
         </div>
         <div class="form-group">
             <label asp-for="Severity" class="form-label"></label><br>

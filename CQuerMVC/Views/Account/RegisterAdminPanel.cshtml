@@ -3,28 +3,24 @@
     ViewData["Title"] = "Home Page";
 }
 <div id="login-row" class="row justify-content-center align-items-center">
-    <div id="login-column" class="col-md-6">
-        <div id="login-box" class="col-md-12">
-            <form asp-controller="Account" asp-action="RegisterAdminPanel" method="post" class="form">
-                <h1 class="text-center">Register Admin</h1>
-                <p class="text-secondary"> Create new admin account</p>
-                <div class="form-group">
-                    <input type="text" class="form-control" asp-for="Username" placeholder="Username" required="required">
-                    <span asp-validation-for="Username" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="password" class="form-control" asp-for="Password" placeholder="Password" required="required">
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="password" class="form-control" asp-for="RepeatedPassword" placeholder="Repeat Password" required="required">
-                    <span asp-validation-for="RepeatedPassword" class="text-danger"></span>
-                </div>
-                <input type="submit" name="" value="Register" href="#">
-                <p class="text-success">@ViewBag.Result</p>
-            </form>
+    <form asp-controller="Account" asp-action="RegisterAdminPanel" method="post" class="box">
+        <h1 class="text-center">REGISTER ADMIN</h1>
+        <p class="text-secondary"> Create new admin account</p>
+        <div class="form-group">
+            <input type="text" class="form-control" asp-for="Username" placeholder="Username" required="required">
+            <span asp-validation-for="Username" class="text-danger"></span>
         </div>
-    </div>
+        <div class="form-group">
+            <input type="password" class="form-control" asp-for="Password" placeholder="Password" required="required">
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" asp-for="RepeatedPassword" placeholder="Repeat Password" required="required">
+            <span asp-validation-for="RepeatedPassword" class="text-danger"></span>
+        </div>
+        <input type="submit" name="" value="Register" href="#">
+        <p class="text-success">@ViewBag.Result</p>
+    </form>           
 </div>
 
 @section Scripts
