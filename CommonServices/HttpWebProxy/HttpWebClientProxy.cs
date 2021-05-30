@@ -5,11 +5,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CommonServices.HttpWebProxy
 {
     class HttpWebClientProxy : IHttpWebClientProxy
     {
+        private static readonly int CRAWLER_BASE_DEPTH = 3;
         private readonly ILogger<HttpWebClientProxy> _logger;
 
         public HttpWebClientProxy(ILogger<HttpWebClientProxy> logger)
@@ -58,6 +60,24 @@ namespace CommonServices.HttpWebProxy
                 sha256Checksum = string.Empty;
                 return false;
             }
+        }
+
+        public async Task<string> TryFindChecksumWithCrawler(string sourceUrl, string directDownloadUrl)
+        {
+            WebCrawler webCrawler = new WebCrawler(sourceUrl);
+            SimpleWebScraper simpleWebScraper = new SimpleWebScraper();
+
+            var crawledPages = await webCrawler.Crawl(CRAWLER_BASE_DEPTH);
+
+            foreach (var page in crawledPages)
+            {
+                if (simpleWebScraper.TryGetSha256FromHtml(page, directDownloadUrl, out string result))
+                {
+                    return result;
+                }
+            }
+
+            return string.Empty;
         }
     }
 }

@@ -53,5 +53,12 @@ namespace CommonServices.ClientService.FileClient
             var response = await _restClient.ExecuteAsync(request);
             return response;
         }
+
+        public async Task<IRestResponse> ValidateFileChecksumWithCrawler(int id)
+        {
+            var request = new RestRequest(id.ToString() + "/validate/crawl", Method.PUT);
+            var response = await _restClient.ExecuteAsync(request);
+            return response;
+        }
     }
 }

@@ -30,10 +30,18 @@
                 <input name="fileName" type="hidden" asp-for="@item.FileName" />
                 <button class="btn-primary bg-info">Download</button>
             </form>
-            <br />
             @if (User.IsInRole(AccountType.Administrator.ToString()))
             {
+                <br />
                 <a asp-action="Delete" asp-route-id="@item.Id" class="btn-secondary bg-danger p-1">Remove</a>
+                @if (!item.ChecksumMatchWithRemote)
+                {
+                    <br />
+                    <form asp-controller="Files" asp-action="ValidateWithCrawler">
+                        <input name="id" type="hidden" asp-for="@item.Id" />
+                        <button class="btn-primary bg-info">Validate With Crawler</button>
+                    </form>
+                }
             }
         </td>
     </tr>

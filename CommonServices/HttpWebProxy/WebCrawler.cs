@@ -2,14 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace CommonServices.HttpWebProxy
 {
     public class WebCrawler
     {
-        private static readonly string HTTP_HEAD = "HEAD";
         private static readonly string HTML_RESPONSE_TYPE = "text/html";
         private readonly string baseUrl;
         private readonly HtmlWeb _htmlWeb;
@@ -20,48 +21,79 @@ namespace CommonServices.HttpWebProxy
             _htmlParser = new HtmlParser();
             baseUrl = ExtractBaseUrl(url);
         }
+        public async Task<List<HtmlDocument>> Crawl(int depth)
+        {
+            List<HtmlDocument> results = new List<HtmlDocument>();
+            var urlsToCrawl = _htmlParser.GetUrlsFromHtmlDocumentLinks(Crawl(baseUrl));
+            await Crawl(urlsToCrawl, depth - 1, results);
+            return results;
+        }
         public HtmlDocument Crawl(string url)
         {
             return url.StartsWith(baseUrl) ? _htmlWeb.Load(url) : null;
         }
-        public List<HtmlDocument> Crawl(string url, int depth)
+        public async Task<List<HtmlDocument>> Crawl(string url, int depth)
         {
             List<HtmlDocument> results = new List<HtmlDocument>();
             var urlsToCrawl = _htmlParser.GetUrlsFromHtmlDocumentLinks(Crawl(url));
-            Crawl(urlsToCrawl, depth - 1, results);
+            await Crawl(urlsToCrawl, depth - 1, results);
             return results;
         }
 
-        private void Crawl(List<string> urls, int depth, List<HtmlDocument> results)
+        private async Task Crawl(List<string> urls, int depth, List<HtmlDocument> results)
         {
             if (depth == 0)
                 return;
-            urls.ForEach(url =>
+
+            foreach (var url in urls)
             {
-                WebResponse response = RequestHeadFromUrl(url);
-                if (url.StartsWith(baseUrl) && response.ContentType.Contains(HTML_RESPONSE_TYPE))
+                var response = await RequestHeadFromUrl(url);
+                if (url.StartsWith(baseUrl) && response != null && response.IsSuccessStatusCode)
                 {
-                    var crawledSite = Crawl(url);
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var crawledSite = new HtmlDocument();
+                    crawledSite.LoadHtml(responseContent);
                     results.Add(crawledSite);
                     var urlsToCrawl = _htmlParser.GetUrlsFromHtmlDocumentLinks(crawledSite);
-                    Crawl(urlsToCrawl, depth - 1, results);
+                    await Crawl(urlsToCrawl, depth - 1, results);
                 }
                 else
-                    return;
-            });
+                    continue;
+            }
         }
 
         //TODO: Might want to change this one to HttpClient
-        private static WebResponse RequestHeadFromUrl(string url)
+        private async Task<HttpResponseMessage> RequestHeadFromUrl(string url, bool useHeadMethod = false)
         {
-            var request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = HTTP_HEAD;
-            return request.GetResponse();
+            var client = new HttpClient();
+            if (!useHeadMethod)
+            {
+                var message = new HttpRequestMessage(HttpMethod.Get, url);
+                var response = await client.SendAsync(message, HttpCompletionOption.ResponseHeadersRead);
+                if(!response.Content.Headers.ContentType.MediaType.Equals(HTML_RESPONSE_TYPE))
+                {
+                    response.Dispose();
+                    return null;
+                }
+                
+                return response;
+            }
+            else
+            {
+                var message = new HttpRequestMessage(HttpMethod.Head, url);
+                var response = await client.SendAsync(message, HttpCompletionOption.ResponseHeadersRead);
+                if (!response.Content.Headers.ContentType.Equals(HTML_RESPONSE_TYPE))
+                {
+                    response.Dispose();
+                    return null;
+                }
+                return response;
+            }
         }
 
         public string ExtractBaseUrl(string url)
         {
-            var regex = new Regex(@"^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)");
+            var regex = new Regex(@"^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*((:(0-9)*)\d{2,5}){0,1}(\/?)");
             var result = regex.Match(url).Value;
             return result.EndsWith("/") ? result : result + "/";
         }

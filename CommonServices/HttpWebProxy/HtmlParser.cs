@@ -26,8 +26,6 @@ namespace CommonServices.HttpWebProxy
                     fileDownloadNode = processedNode;
             }
 
-            if (fileDownloadNode is null)
-                throw new Exception("Can't find direct file download link in HTML document!");
             return fileDownloadNode;
         }
 
@@ -35,6 +33,9 @@ namespace CommonServices.HttpWebProxy
         {
             List<string> gatheredUrls = new List<string>();
             var nodesWithHyperlinks = GetAllNodesWithHyperlinks(htmlDocument);
+            if (nodesWithHyperlinks is null)
+                return gatheredUrls;
+
             foreach(var processedNode in nodesWithHyperlinks)
             {
                 gatheredUrls.Add(processedNode.GetAttributeValue(HREF_ATTRIBUTE, ""));
@@ -79,7 +80,10 @@ namespace CommonServices.HttpWebProxy
                 return null;
 
             var parentNode = node.ParentNode;
-            var foundNode = parentNode.SelectSingleNode(parentNode.XPath + "/*[text()[contains(., '" + substringToSearchFor + "')]]");
+
+            HtmlNode foundNode = parentNode.SelectSingleNode(parentNode.XPath + "[text()[contains(., '" + substringToSearchFor + "')]]");
+            if(foundNode is null)
+                foundNode = parentNode.SelectSingleNode(parentNode.XPath + "/*[text()[contains(., '" + substringToSearchFor + "')]]");
 
             return foundNode is null ? SearchClosestParentWithSubstring(parentNode, substringToSearchFor) : foundNode;
         }

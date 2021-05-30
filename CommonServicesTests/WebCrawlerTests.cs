@@ -14,6 +14,8 @@ namespace CommonServicesTests
         private static readonly string BASE_URL_WITH_FILE_IN_SUBDIRECTORY = "http://test.com/example/test.php";
         private static readonly string INVALID_BASE_URL = "http://test./test";
         private static readonly string READABLE_INVALID_BASE_URL = "http://test/";
+        private static readonly string URL_WITH_PORT = "http://localhost:8000/";
+        
         [TestMethod]
         public void CAN_EXTRACT_BASE_URL()
         {
@@ -62,6 +64,13 @@ namespace CommonServicesTests
             var objectUnderTest = new WebCrawler(INVALID_BASE_URL);
             var result = objectUnderTest.ExtractBaseUrl(INVALID_BASE_URL);
             Assert.AreEqual(READABLE_INVALID_BASE_URL, result);
+        }
+        [TestMethod]
+        public void RETURNS_VALID_URL_WITH_PORT()
+        {
+            var objectUnderTest = new WebCrawler(URL_WITH_PORT);
+            var result = objectUnderTest.ExtractBaseUrl(URL_WITH_PORT);
+            Assert.AreEqual(URL_WITH_PORT, result);
         }
     }
 }

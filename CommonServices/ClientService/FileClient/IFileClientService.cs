@@ -14,6 +14,7 @@ namespace CommonServices.ClientService.FileClient
         public Task<Stream> DownloadFileFromLocal(int fileId);
         public Task<IRestResponse> RemoveFile(int id);
         public Task<IRestResponse> ValidateFileChecksum(int id);
+        public Task<IRestResponse> ValidateFileChecksumWithCrawler(int id);
         public Task<IEnumerable<FileReferenceDto>> GetFileReferences();
     }
 }

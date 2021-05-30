@@ -57,5 +57,15 @@ namespace CQuerAPI.Controllers
             await _fileManagerService.VerifyChecksum(id);
             return Ok();
         }
+
+        [HttpPut("{id}/validate/crawl")]
+        public async Task<ActionResult> ValidateChecksumWithCrawler(int id)
+        {
+            if (!ModelState.IsValid)
+                BadRequest(ModelState);
+
+            await _fileManagerService.ValidateChecksumWithCrawler(id);
+            return Ok();
+        }
     }
 }

@@ -17,8 +17,8 @@ namespace CQuerMVC.Controllers
     [Authorize]
     public class FilesController : Controller
     {
-        private IFileClientService _fileClientService;
-        private ITicketClientService _ticketClientService;
+        private readonly IFileClientService _fileClientService;
+        private readonly ITicketClientService _ticketClientService;
 
         public FilesController(IFileClientService fileClientService, ITicketClientService ticketClientService)
         {
@@ -44,6 +44,15 @@ namespace CQuerMVC.Controllers
                 return RedirectToAction("Error");
 
             _ = Task.Run(() => ResolveFileReference(downloadReferenceDto));
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [EnumAuthorizeRole(AccountType.Administrator)]
+        public IActionResult ValidateWithCrawler(int id)
+        {
+            _ = Task.Run(() => _fileClientService.ValidateFileChecksumWithCrawler(id));
 
             return RedirectToAction("Index");
         }
