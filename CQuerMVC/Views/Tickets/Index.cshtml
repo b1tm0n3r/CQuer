@@ -29,7 +29,7 @@
                     <td style="width: 10%">@item.DownloadUrl</td>
                     <td style="width: 15%">@item.Sha256Checksum</td>
                     <td style="width: 15%">
-                        @if (User.IsInRole(AccountType.Administrator.ToString()))
+                        @if (User.IsInRole(AccountType.Administrator.ToString()) && !item.Solved)
                         {
                             <form asp-controller="Files" asp-action="Resolver">
                                 <input name="TicketId" type="hidden" asp-for="@item.Id" />
