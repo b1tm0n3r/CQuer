@@ -116,8 +116,9 @@ namespace CommonServices.FileManager
             var directDownloadUrl = processedTicket.DownloadUrl;
             var baseDownloadPageUrl = directDownloadUrl.Substring(0, directDownloadUrl.LastIndexOf("/") + 1);
 
-            if (_httpWebClientProxy.TryFindChecksumWithCrawler(baseDownloadPageUrl, directDownloadUrl, out var sha256Checksum))
-                processedFileReference.ChecksumMatchWithRemote = processedFileReference.Sha256Checksum.Equals(sha256Checksum);
+            var checksum = await _httpWebClientProxy.TryFindChecksumWithCrawler(baseDownloadPageUrl, directDownloadUrl);
+            if (!checksum.Equals(string.Empty) && checksum != null)
+                processedFileReference.ChecksumMatchWithRemote = processedFileReference.Sha256Checksum.Equals(checksum);
 
             var recordChanged = processedFileReference.ChecksumMatchWithRemote;
             if(recordChanged)

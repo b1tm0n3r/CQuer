@@ -30,6 +30,9 @@ namespace CommonServices.HttpWebProxy
                 return false;
 
             HtmlNode fileDownloadNode = _htmlParser.GetFileDownloadNodeByDirectUrl(directDownloadUrl, nodesWithHyperlinks);
+            if (fileDownloadNode is null)
+                return false;
+
             if (!_htmlParser.IsNodePartOfTable(fileDownloadNode))
             {
                 sha256Checksum = GetSha256FromClosestHtmlParent(fileDownloadNode);
