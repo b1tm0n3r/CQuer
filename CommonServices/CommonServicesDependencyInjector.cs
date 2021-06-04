@@ -1,5 +1,4 @@
-﻿using CommonServices.DatabaseOperator;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using CommonServices.AccountServices;
 using CommonServices.FileManager;
@@ -19,17 +18,11 @@ namespace CommonServices
         private static readonly string API_CONFIGURATION_OPTION = "CQuerLocalAPIURL";
         public static IServiceCollection AddCommonServices(this IServiceCollection services, IConfiguration configuration)
         {
-            AddDatabaseConnector(services);
             AddAccountService(services);
             AddHttpWebClientProxy(services);
             AddFileManager(services, configuration);
             AddTicketService(services);
             return services;
-        }
-
-        private static void AddDatabaseConnector(this IServiceCollection services)
-        {
-            services.AddScoped<IDatabaseConnector, DatabaseConnector>();
         }
         private static void AddFileManager(this IServiceCollection services, IConfiguration configuration)
         {
