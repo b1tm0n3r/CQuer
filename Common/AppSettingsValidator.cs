@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.IO;
+﻿using System.IO;
 using Microsoft.Extensions.Configuration;
-using System.Runtime.InteropServices;
-using System.Security.AccessControl;
-using System.Text;
-using System.Diagnostics;
 
 namespace Common
 {

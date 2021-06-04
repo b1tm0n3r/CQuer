@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CommonServices.DatabaseOperator
+﻿namespace CommonServices.DatabaseOperator
 {
     public interface IDatabaseConnector
     {

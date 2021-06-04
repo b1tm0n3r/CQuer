@@ -1,8 +1,6 @@
 ﻿using HtmlAgilityPack;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CommonServices.HttpWebProxy
 {
@@ -132,9 +130,8 @@ namespace CommonServices.HttpWebProxy
         {
             var nodeTextBlocks = stringToProcess.Split(' ', ':');
             foreach (var textBlock in nodeTextBlocks)
-                if (textBlock.Trim().Replace("\r", "").Replace("\n", "")
-                    .Length == SHA256_HEX_LENGTH)
-                    return textBlock.ToUpper();
+                if (textBlock.Trim().Length == SHA256_HEX_LENGTH)
+                    return textBlock.Trim().ToUpper();
             return string.Empty;
         }
     }

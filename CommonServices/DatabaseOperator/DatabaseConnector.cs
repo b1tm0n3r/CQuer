@@ -1,8 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Persistence.Context;
+﻿using Persistence.Context;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CommonServices.DatabaseOperator
 {

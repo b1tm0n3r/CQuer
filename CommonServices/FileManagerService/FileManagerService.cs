@@ -1,18 +1,13 @@
 ﻿using AutoMapper;
 using Common.DataModels.StandardEntities;
 using Common.DTOs;
-using CommonServices.DatabaseOperator;
 using CommonServices.HttpWebProxy;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Persistence.Context;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CommonServices.FileManager
@@ -96,8 +91,7 @@ namespace CommonServices.FileManager
         private void TryValidateAgainstRemoteChecksum(FileReference processedFileReference, string directDownloadUrl)
         {
             var baseDownloadPageUrl = directDownloadUrl.Substring(0, directDownloadUrl.LastIndexOf("/") + 1);
-            string sha256Checksum;
-            if (_httpWebClientProxy.TryDownloadSha256ChecksumFromFile(directDownloadUrl + ".sha256", out sha256Checksum) ||
+            if (_httpWebClientProxy.TryDownloadSha256ChecksumFromFile(directDownloadUrl + ".sha256", out string sha256Checksum) ||
                 _httpWebClientProxy.TryDownloadSha256ChecksumFromFile(directDownloadUrl + ".sha256sum", out sha256Checksum))
             {
                 processedFileReference.ChecksumMatchWithRemote = processedFileReference.Sha256Checksum.Equals(sha256Checksum);

@@ -3,11 +3,8 @@ using Common.DataModels.StandardEntities;
 using Common.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
-using RestSharp;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CommonServices.TicketServices
