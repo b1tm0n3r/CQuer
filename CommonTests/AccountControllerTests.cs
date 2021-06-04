@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using Common.DataModels.IdentityManagement;
+﻿using System.Threading.Tasks;
 using Common.DTOs;
 using CommonServices.AccountServices;
 using CQuerAPI.Controllers;

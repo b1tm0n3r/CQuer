@@ -2,13 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CommonTests
 {
-    //TODO: merge this with common methods from CommonServicesTests
     public static class CommonMethods
     {
         private static readonly string RESOURCES_DIRECTORY = "resources";
