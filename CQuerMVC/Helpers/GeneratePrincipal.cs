@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
 using Common.DTOs;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
 
 namespace CQuerMVC.Helpers
 {

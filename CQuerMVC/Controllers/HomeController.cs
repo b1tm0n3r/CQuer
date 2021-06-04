@@ -1,30 +1,14 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Common.DataModels.IdentityManagement;
-using Common.DTOs;
-using CommonServices.ClientService.AccountClient;
-using CQuerMVC.Helpers;
+﻿using System.Diagnostics;
 using CQuerMVC.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CQuerMVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController()
         {
-            _logger = logger;
         }
         
         public IActionResult Index()

@@ -1,5 +1,3 @@
-using System;
-
 namespace CQuerMVC.Models
 {
     public class ErrorViewModel

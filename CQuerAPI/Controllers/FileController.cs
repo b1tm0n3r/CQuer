@@ -1,7 +1,6 @@
 ﻿using Common.DTOs;
 using CommonServices.FileManager;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +9,7 @@ namespace CQuerAPI.Controllers
 {
     public class FileController : BaseController
     {
-        private IFileManagerService _fileManagerService;
+        private readonly IFileManagerService _fileManagerService;
         public FileController(IFileManagerService fileManagerService)
         {
             _fileManagerService = fileManagerService;

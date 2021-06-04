@@ -5,6 +5,6 @@ namespace CQuerMVC.Models
 {
     public class RegisterAdminViewModel : RegisterDto
     {
-        public AccountType AccountType { get; set; } = AccountType.Administrator;
+        public new AccountType AccountType { get; set; } = AccountType.Administrator;
     }
 }
