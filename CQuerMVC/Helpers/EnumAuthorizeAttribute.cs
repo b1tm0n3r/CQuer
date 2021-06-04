@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Common.DataModels.IdentityManagement;
 using Microsoft.AspNetCore.Authorization;
 
 namespace CQuerMVC.Helpers

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Common.DTOs;
 using CommonServices.AccountServices;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CQuerAPI.Controllers

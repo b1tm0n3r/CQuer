@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
-using CommonServices;
-using CommonServices.DatabaseOperator;
 using CommonServices.FileManager;
 using CommonServices.HttpWebProxy;
-using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace CommonServicesTests
 {

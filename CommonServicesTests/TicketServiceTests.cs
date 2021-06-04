@@ -2,8 +2,6 @@
 using Common.DataModels.StandardEntities;
 using Common.DTOs;
 using CommonServices.TicketServices;
-using CQuerAPI.Controllers;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MockQueryable.Moq;
 using Moq;
@@ -11,10 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
-using MoqExpression;
 using Common.DataModels.IdentityManagement;
 
 namespace CommonServicesTests
@@ -44,7 +39,7 @@ namespace CommonServicesTests
                 new Account { Name = "test" }
             };
         }
-        private IList<ValidationResult> ValidateModel(object model)
+        private static IList<ValidationResult> ValidateModel(object model)
         {
             var validationResults = new List<ValidationResult>();
             var ctx = new ValidationContext(model, null, null);

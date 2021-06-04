@@ -1,15 +1,10 @@
-﻿using Common.DataModels.StandardEntities;
-using Common.DTOs;
+﻿using Common.DTOs;
 using CommonServices.FileManager;
 using CommonServices.TicketServices;
 using CQuerAPI.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CommonTests

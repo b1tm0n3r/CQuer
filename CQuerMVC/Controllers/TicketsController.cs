@@ -1,15 +1,10 @@
 ﻿using Common.DataModels.IdentityManagement;
 using Common.DTOs;
 using CommonServices.ClientService.TicketClient;
-using CommonServices.TicketServices;
 using CQuerMVC.Helpers;
 using CQuerMVC.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CQuerMVC.Controllers
