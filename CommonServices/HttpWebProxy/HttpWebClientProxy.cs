@@ -19,11 +19,14 @@ namespace CommonServices.HttpWebProxy
             _logger = logger;
         }
 
-        public void DownloadFileFromUrl(string sourceUrl, string destinationPath)
+        public async Task DownloadFileFromUrl(string sourceUrl, string destinationPath)
         {
-            using var webClient = new WebClient();
+            using var webClient = new WebClient
+            {
+                Proxy = null
+            };
             _logger.LogInformation("Downloading file from {0} & saving as {1}", sourceUrl, destinationPath);
-            webClient.DownloadFile(sourceUrl, destinationPath);
+            await webClient.DownloadFileTaskAsync(new Uri(sourceUrl), destinationPath);
         }
 
         public bool TryDownloadSha256ChecksumFromFile(string sourceUrl, out string sha256Checksum)
@@ -36,7 +39,6 @@ namespace CommonServices.HttpWebProxy
                 var responseText = streamReader.ReadToEnd();
 
                 sha256Checksum = HtmlParser.GetSha256ChecksumFromString(responseText);
-
                 return true;
             } 
             catch

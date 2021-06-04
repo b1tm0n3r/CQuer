@@ -132,7 +132,8 @@ namespace CommonServices.HttpWebProxy
         {
             var nodeTextBlocks = stringToProcess.Split(' ', ':');
             foreach (var textBlock in nodeTextBlocks)
-                if (textBlock.Trim().Length == SHA256_HEX_LENGTH)
+                if (textBlock.Trim().Replace("\r", "").Replace("\n", "")
+                    .Length == SHA256_HEX_LENGTH)
                     return textBlock.ToUpper();
             return string.Empty;
         }

@@ -35,7 +35,7 @@ namespace CommonServices.FileManager
         {
             string fileName = downloadReferenceDto.DownloadUrl.Split("/").Last();
             string filePath = BASE_FILESTORE_PATH + Path.DirectorySeparatorChar + fileName;
-            _httpWebClientProxy.DownloadFileFromUrl(downloadReferenceDto.DownloadUrl, filePath);
+            await _httpWebClientProxy.DownloadFileFromUrl(downloadReferenceDto.DownloadUrl, filePath);
             var result = await _dbContext.FileReferences.AddAsync(new FileReference()
             {
                 TicketId = downloadReferenceDto.TicketId,
