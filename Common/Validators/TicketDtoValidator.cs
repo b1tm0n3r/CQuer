@@ -24,7 +24,7 @@ namespace Common.Validators
         }
         private bool CheckUrlBadChars(string url)
         {
-            var regex = new Regex(@"[\^<>;_\|]");
+            var regex = new Regex(@"[\^<>\|]");
             return !regex.IsMatch(url);
         }
     }
