@@ -7,8 +7,8 @@ namespace Common.Validators
     {
         public DownloadReferenceDtoValidator()
         {
-            RuleFor(x => x.TicketId).NotNull().GreaterThan(0).WithMessage("Ticket ID required!");
-            RuleFor(x => x.DownloadUrl).NotEmpty().WithMessage("Download URL cannot be empty!");
+            RuleFor(x => x.TicketId).NotNull().GreaterThan(0).WithMessage(Resources.DataModelValidationErrorMessages.MissingTicketId);
+            RuleFor(x => x.DownloadUrl).NotEmpty().WithMessage(Resources.DataModelValidationErrorMessages.EmptyUrl);
         }
     }
 }

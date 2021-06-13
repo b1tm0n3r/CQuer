@@ -8,9 +8,9 @@ namespace Common.Validators
     {
         public RegisterDtoValidator()
         {
-            RuleFor(x => x.AccountType).IsInEnum().WithMessage("Invalid Account Type!");
-            RuleFor(x => x.Password).Equal(x => x.RepeatedPassword).WithMessage("Passwords are not the same!");
-            RuleFor(x => x.Username).Must(CheckUsername).WithMessage("Username cannot contain special characters!");
+            RuleFor(x => x.AccountType).IsInEnum().WithMessage(Resources.DataModelValidationErrorMessages.InvalidAccountType);
+            RuleFor(x => x.Password).Equal(x => x.RepeatedPassword).WithMessage(Resources.DataModelValidationErrorMessages.PasswordMismatch);
+            RuleFor(x => x.Username).Must(CheckUsername).WithMessage(Resources.DataModelValidationErrorMessages.SpecialCharactersUsername);
         }
         
         private bool CheckUsername(string username)
