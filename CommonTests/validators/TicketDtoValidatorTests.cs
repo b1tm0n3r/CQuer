@@ -107,5 +107,45 @@ namespace CommonTests.validators
             Assert.IsNotNull(result);
             Assert.IsFalse(result.IsValid);
         }
+        [TestMethod]
+        public void RETURN_TRUE_ON_MAX_SEVERITY_VALUE()
+        {
+            TicketDtoValidator objectUnderTest = new TicketDtoValidator();
+
+            TicketDto testData = new TicketDto()
+            {
+                Description = "test",
+                DownloadUrl = "http://127.0.0.1/test",
+                Severity = 5,
+                Sha256Checksum = "",
+                Solved = false,
+                Username = "test"
+            };
+
+            var result = objectUnderTest.Validate(testData);
+
+            Assert.IsNotNull(result);
+            Assert.IsT(result.IsValid);
+        }
+        [TestMethod]
+        public void RETURN_TRUE_ON_MIN_SEVERITY_VALUE()
+        {
+            TicketDtoValidator objectUnderTest = new TicketDtoValidator();
+
+            TicketDto testData = new TicketDto()
+            {
+                Description = "test",
+                DownloadUrl = "http://127.0.0.1/test",
+                Severity = 1,
+                Sha256Checksum = "",
+                Solved = false,
+                Username = "test"
+            };
+
+            var result = objectUnderTest.Validate(testData);
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.IsValid);
+        }
     }
 }
