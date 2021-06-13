@@ -4,6 +4,7 @@ using CommonServices.ClientService.FileClient;
 using CommonServices.ClientService.TicketClient;
 using CQuerMVC.Helpers;
 using CQuerMVC.Models;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -15,11 +16,14 @@ namespace CQuerMVC.Controllers
     {
         private readonly IFileClientService _fileClientService;
         private readonly ITicketClientService _ticketClientService;
+        private readonly IValidator _downloadReferenceDtoValidator;
 
-        public FilesController(IFileClientService fileClientService, ITicketClientService ticketClientService)
+        public FilesController(IFileClientService fileClientService, 
+            ITicketClientService ticketClientService, IValidator<DownloadReferenceDto> downloadReferenceDtoValidator)
         {
             _fileClientService = fileClientService;
             _ticketClientService = ticketClientService;
+            _downloadReferenceDtoValidator = downloadReferenceDtoValidator;
         }
 
         public async Task<IActionResult> Index()
@@ -35,6 +39,10 @@ namespace CQuerMVC.Controllers
         [EnumAuthorizeRole(AccountType.Administrator)]
         public async Task<IActionResult> Resolver(DownloadReferenceDto downloadReferenceDto)
         {
+            var validationContext = new ValidationContext<DownloadReferenceDto>(downloadReferenceDto);
+            if (!_downloadReferenceDtoValidator.Validate(validationContext).IsValid)
+                return RedirectToAction("Error");
+
             var ticketReference = await _ticketClientService.GetTicket(downloadReferenceDto.TicketId);
             if (ticketReference is null || !IsProcessedFileReferenceValid(ticketReference, downloadReferenceDto))
                 return RedirectToAction("Error");

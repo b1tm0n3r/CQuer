@@ -1,6 +1,7 @@
 using Common;
 using Common.Exceptions;
 using CommonServices;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,7 +42,9 @@ namespace CQuerMVC
                     options.Cookie.HttpOnly = true;
                 });
             services.AddControllersWithViews()
-                .AddRazorRuntimeCompilation();
+                .AddRazorRuntimeCompilation()
+                .AddFluentValidation(x =>
+                    x.RegisterValidatorsFromAssemblyContaining<Common.Validators.RegisterDtoValidator>());
             services.AddApiClientServices(Configuration);
         }
 
