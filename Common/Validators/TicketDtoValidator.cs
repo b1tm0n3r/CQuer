@@ -8,14 +8,14 @@ namespace Common.Validators
     {
         public TicketDtoValidator()
         {
-            RuleFor(x => x.DownloadUrl).NotNull().WithMessage("Download URL cannot be null")
-                .NotEmpty().WithMessage("Download URL cannot be empty")
-                .Must(CheckUrlBadChars).WithMessage("Special characters not allowed in URL");
+            RuleFor(x => x.DownloadUrl).NotNull().WithMessage(Resources.DataModelValidationErrorMessages.NullUrl)
+                .NotEmpty().WithMessage(Resources.DataModelValidationErrorMessages.EmptyUrl)
+                .Must(CheckUrlBadChars).WithMessage(Resources.DataModelValidationErrorMessages.SpecialCharactersUrl);
 
-            RuleFor(x => x.Severity).GreaterThanOrEqualTo(1).WithMessage("Severity minimum value is 1")
-                .LessThanOrEqualTo(5).WithMessage("Severity maximum value is 5");
+            RuleFor(x => x.Severity).GreaterThanOrEqualTo(1).WithMessage(Resources.DataModelValidationErrorMessages.SeverityLessThanMin)
+                .LessThanOrEqualTo(5).WithMessage(Resources.DataModelValidationErrorMessages.SeverityGreaterThanMax);
 
-            RuleFor(x => x.Description).Must(CheckDescriptionBadChars).WithMessage("Special characters not allowed in description");
+            RuleFor(x => x.Description).Must(CheckDescriptionBadChars).WithMessage(Resources.DataModelValidationErrorMessages.SpecialCharactersTicketDescription);
         }
         private bool CheckDescriptionBadChars(string description)
         {
