@@ -125,7 +125,7 @@ namespace CommonTests.validators
             var result = objectUnderTest.Validate(testData);
 
             Assert.IsNotNull(result);
-            Assert.IsT(result.IsValid);
+            Assert.IsTrue(result.IsValid);
         }
         [TestMethod]
         public void RETURN_TRUE_ON_MIN_SEVERITY_VALUE()

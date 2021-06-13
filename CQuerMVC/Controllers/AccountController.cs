@@ -6,6 +6,7 @@ using Common.DTOs;
 using CommonServices.ClientService.AccountClient;
 using CQuerMVC.Helpers;
 using CQuerMVC.Models;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -16,9 +17,11 @@ namespace CQuerMVC.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountClientService _accountClientService;
-        public AccountController(IAccountClientService accountClientService)
+        private readonly IValidator _registerValidator;
+        public AccountController(IAccountClientService accountClientService, IValidator<RegisterDto> registerValidator)
         {
             _accountClientService = accountClientService;
+            _registerValidator = registerValidator;
         }
 
         [Authorize]
@@ -66,7 +69,8 @@ namespace CQuerMVC.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterStandardUserViewModel registerDto)
         {
-            if (!ModelState.IsValid)
+            IValidationContext validationContext = new ValidationContext<RegisterDto>(registerDto);
+            if (!ModelState.IsValid || !_registerValidator.Validate(validationContext).IsValid)
                 return View();
 
             var registerResponse = _accountClientService.RegisterResponse(registerDto);
@@ -92,7 +96,8 @@ namespace CQuerMVC.Controllers
         [EnumAuthorizeRole(AccountType.Administrator)]
         public async Task<IActionResult> RegisterAdminPanel(RegisterAdminViewModel registerDto)
         {
-            if (!ModelState.IsValid)
+            IValidationContext validationContext = new ValidationContext<RegisterDto>(registerDto);
+            if (!ModelState.IsValid || !_registerValidator.Validate(validationContext).IsValid)
                 return View();
             
             var registerResponse = await _accountClientService.RegisterResponse(registerDto);

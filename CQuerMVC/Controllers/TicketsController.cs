@@ -3,6 +3,7 @@ using Common.DTOs;
 using CommonServices.ClientService.TicketClient;
 using CQuerMVC.Helpers;
 using CQuerMVC.Models;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -13,9 +14,11 @@ namespace CQuerMVC.Controllers
     public class TicketsController : Controller
     {
         private readonly ITicketClientService _ticketClientService;
-        public TicketsController(ITicketClientService ticketClientService)
+        private readonly IValidator _ticketDtoValidator;
+        public TicketsController(ITicketClientService ticketClientService, IValidator<TicketDto> ticketDtoValidator)
         {
             _ticketClientService = ticketClientService;
+            _ticketDtoValidator = ticketDtoValidator;
         }
         public async Task<IActionResult> Index()
         {
@@ -33,6 +36,10 @@ namespace CQuerMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(TicketDto ticketDto)
         {
+            var validationContext = new ValidationContext<TicketDto>(ticketDto);
+            if (!_ticketDtoValidator.Validate(validationContext).IsValid)
+                return RedirectToAction("Error");
+
             var result = await _ticketClientService.CreateTicket(ticketDto);
             if (!result.IsSuccessful)
                 return RedirectToAction("Error");
@@ -47,6 +54,10 @@ namespace CQuerMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(TicketDto ticketDto)
         {
+            var validationContext = new ValidationContext<TicketDto>(ticketDto);
+            if (!_ticketDtoValidator.Validate(validationContext).IsValid)
+                return RedirectToAction("Error");
+
             var result = await _ticketClientService.UpdateTicket(ticketDto);
             if (!result.IsSuccessful)
                 return RedirectToAction("Error");
