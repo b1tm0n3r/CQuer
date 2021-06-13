@@ -12,7 +12,7 @@ namespace CommonTests.validators
         {
             TicketDtoValidator objectUnderTest = new TicketDtoValidator();
 
-            TicketDto ticketDto = new TicketDto()
+            TicketDto testData = new TicketDto()
             {
                 Description = "test",
                 DownloadUrl = "http://127.0.0.1/test",
@@ -22,7 +22,7 @@ namespace CommonTests.validators
                 Username = "test"
             };
 
-            var result = objectUnderTest.Validate(ticketDto);
+            var result = objectUnderTest.Validate(testData);
 
             Assert.IsNotNull(result);
             Assert.IsTrue(result.IsValid);
@@ -32,7 +32,7 @@ namespace CommonTests.validators
         {
             TicketDtoValidator objectUnderTest = new TicketDtoValidator();
 
-            TicketDto ticketDto = new TicketDto()
+            TicketDto testData = new TicketDto()
             {
                 Description = "test",
                 DownloadUrl = "http://127.0.0.1/test",
@@ -42,7 +42,7 @@ namespace CommonTests.validators
                 Username = "test"
             };
 
-            var result = objectUnderTest.Validate(ticketDto);
+            var result = objectUnderTest.Validate(testData);
 
             Assert.IsNotNull(result);
             Assert.IsFalse(result.IsValid);
@@ -52,7 +52,7 @@ namespace CommonTests.validators
         {
             TicketDtoValidator objectUnderTest = new TicketDtoValidator();
 
-            TicketDto ticketDto = new TicketDto()
+            TicketDto testData = new TicketDto()
             {
                 Description = "test",
                 DownloadUrl = "http://127.0.0.1/test",
@@ -62,7 +62,7 @@ namespace CommonTests.validators
                 Username = "test"
             };
 
-            var result = objectUnderTest.Validate(ticketDto);
+            var result = objectUnderTest.Validate(testData);
 
             Assert.IsNotNull(result);
             Assert.IsFalse(result.IsValid);
@@ -72,7 +72,7 @@ namespace CommonTests.validators
         {
             TicketDtoValidator objectUnderTest = new TicketDtoValidator();
 
-            TicketDto ticketDto = new TicketDto()
+            TicketDto testData = new TicketDto()
             {
                 Description = "<test>test|$test</test>",
                 DownloadUrl = "http://127.0.0.1/test",
@@ -82,7 +82,7 @@ namespace CommonTests.validators
                 Username = "test"
             };
 
-            var result = objectUnderTest.Validate(ticketDto);
+            var result = objectUnderTest.Validate(testData);
 
             Assert.IsNotNull(result);
             Assert.IsFalse(result.IsValid);
@@ -92,7 +92,7 @@ namespace CommonTests.validators
         {
             TicketDtoValidator objectUnderTest = new TicketDtoValidator();
 
-            TicketDto ticketDto = new TicketDto()
+            TicketDto testData = new TicketDto()
             {
                 Description = "test",
                 DownloadUrl = "",
@@ -102,7 +102,7 @@ namespace CommonTests.validators
                 Username = "test"
             };
 
-            var result = objectUnderTest.Validate(ticketDto);
+            var result = objectUnderTest.Validate(testData);
 
             Assert.IsNotNull(result);
             Assert.IsFalse(result.IsValid);
